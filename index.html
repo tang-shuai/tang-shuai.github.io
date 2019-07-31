@@ -262,6 +262,425 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/31/ECMAScript6 个人理解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tang Shuai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/headPortrait.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/31/ECMAScript6 个人理解/" itemprop="url">ECMAScript6个人理解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-31T16:49:39+08:00">
+                2019-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Set和Map-数据结构"><a href="#Set和Map-数据结构" class="headerlink" title="Set和Map 数据结构"></a>Set和Map 数据结构</h2><h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><blockquote>
+<p>ES6 新提供的数据结构,类似于数组,但是成员的值唯一</p>
+</blockquote>
+<ul>
+<li><p><code>set</code> 本身是构造函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>].forEach(<span class="function"><span class="params">x</span> =&gt;</span>a.add(x));</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">of</span> a)&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(i)</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//1,2,3,4,5,6</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用add方法,可以向Set结构加入成员</strong></p>
+</li>
+<li><p><code>Set</code> 函数可以接受具有Iterator 接口的其他数据作为参数,用来初始化</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例一</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">set</span> = new Set([1,2,3,4,4]);</span><br><span class="line">[...<span class="keyword">set</span>]</span><br><span class="line">//[1,2,3,4]</span><br><span class="line"></span><br><span class="line">//例二</span><br><span class="line">const items = new Set([1,2,3,4,5,5,5,5]);</span><br><span class="line">item.size //5</span><br><span class="line"></span><br><span class="line">//例三</span><br><span class="line">const <span class="keyword">set</span> = new Set(document.querySelectorAll('div'));</span><br><span class="line"><span class="keyword">set</span>.size //56</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面的前两个例子接受数组作为参数,最后一个为类似于数组的对象作为参数</p>
+</li>
+<li><p>新的数组去重方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">set</span> = new Set([1,2,3,4,4]);</span><br><span class="line">[...<span class="keyword">set</span>]</span><br><span class="line">//[1,2,3,4]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>去除字符串的重复字符</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[...new <span class="built_in">Set</span>(<span class="string">'abbbc'</span>)].join(<span class="string">''</span>) <span class="comment">//"abc"</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>向Set加入值时,不会发生类型的转变</p>
+<ul>
+<li><p>两个对象总是不相等的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">set</span> = new Set();</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>.add(&#123;&#125;);</span><br><span class="line"><span class="keyword">set</span>.size //1</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>.add(&#123;&#125;);</span><br><span class="line"><span class="keyword">set</span>.size //2</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Set-实例属性和方法"><a href="#Set-实例属性和方法" class="headerlink" title="Set 实例属性和方法"></a>Set 实例属性和方法</h4><ul>
+<li><p>Set 实例属性</p>
+<ul>
+<li>Set.prototype.constructor: 构造函数,默认就是<code>Set</code>函数</li>
+<li>Set.prototype.size: 返回Set实例的成员总数</li>
+</ul>
+</li>
+<li><p>Set 实例方法分为2类: 操作方法和遍历方法</p>
+<ul>
+<li><p>操作方法</p>
+<ul>
+<li>Set.prototype.add(value) 返回set结构本身</li>
+<li>Set.prototype.delete(value) 返回一个布尔值,表示是否删除成功</li>
+<li>Set.prototype.has(value) 返回一个布尔值,表示该值是否是Set成员</li>
+<li>Ser.prototype.clear( )</li>
+</ul>
+</li>
+<li><p>遍历方法</p>
+<ul>
+<li><code>Set.prototype.keys()</code>：返回键名的遍历器</li>
+<li><code>Set.prototype.values()</code>：返回键值的遍历器</li>
+<li><code>Set.prototype.entries()</code>：返回键值对的遍历器</li>
+<li><code>Set.prototype.forEach()</code>：使用回调函数遍历每个成员</li>
+</ul>
+</li>
+<li><p>遍历的应用</p>
+<ul>
+<li><p>扩展运算符(…) 内部使用<code>for...of</code> 循环,也可以用于<code>Set</code>结构</p>
+</li>
+<li><p>数组去重</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">3</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">5</span>]</span><br><span class="line"><span class="keyword">let</span> a = [...new <span class="built_in">Set</span>(arr)]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数组的<code>map</code>和<code>filter</code> 间接地用于<code>Set</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">set</span> = new Set([1, 2, 3]);</span><br><span class="line"><span class="keyword">set</span> = new Set([...<span class="keyword">set</span>].map(x =&gt; x * 2));</span><br><span class="line">// 返回Set结构：&#123;<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">set</span> = new Set([1, 2, 3, 4, 5]);</span><br><span class="line"><span class="keyword">set</span> = new Set([...<span class="keyword">set</span>].filter(x =&gt; (x % 2) == 0));</span><br><span class="line">// 返回Set结构：&#123;<span class="number">2</span>, <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Set</code>实现并集(Union),交集(Intersect)和差集(Difference)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="keyword">let</span> b = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 并集</span></span><br><span class="line"><span class="keyword">let</span> union = <span class="keyword">new</span> <span class="built_in">Set</span>([...a, ...b]);</span><br><span class="line"><span class="comment">// Set &#123;1, 2, 3, 4&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 交集</span></span><br><span class="line"><span class="keyword">let</span> intersect = <span class="keyword">new</span> <span class="built_in">Set</span>([...a].filter(<span class="function"><span class="params">x</span> =&gt;</span> b.has(x)));</span><br><span class="line"><span class="comment">// set &#123;2, 3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 差集</span></span><br><span class="line"><span class="keyword">let</span> difference = <span class="keyword">new</span> <span class="built_in">Set</span>([...a].filter(<span class="function"><span class="params">x</span> =&gt;</span> !b.has(x)));</span><br><span class="line"><span class="comment">// Set &#123;1&#125;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><h4 id="含义和基本用法"><a href="#含义和基本用法" class="headerlink" title="含义和基本用法"></a>含义和基本用法</h4><blockquote>
+<p><code>JavaScript</code> 的对象,本质上是键值对的集合 (Hash 结构) ,传统的只能用字符串当作键,有很大的限制性.Map数据解决了这个问题,使得”键”的范围不限于字符串,各种类型的值都可以当作键. 也就是Object结构提供”字符串-值”的对应,map数据提供”值-值”的对应</p>
+</blockquote>
+<ul>
+<li><p><code>Map</code> 构造函数接受数组作为参数.事实上任何据有Iterator接口的,且每个成员都是一个双元素的数组的数据结构都可以当作<code>Map</code>数据的参数</p>
+<ul>
+<li><p>如果对同一个键多次赋值,后面的值将覆盖前面的值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">map</span><br><span class="line">    .set(<span class="number">1</span>,<span class="string">'aaaa'</span>)</span><br><span class="line">	.set(<span class="number">1</span>,<span class="string">'bbb'</span>);</span><br><span class="line"></span><br><span class="line">map.get(<span class="number">1</span>) <span class="comment">//'bbb'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果读取一个未知的键,则返回的<code>undefined</code> </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Map</span>().get(<span class="string">'asfddfs'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>注意:</strong> 只有对同一个对象的引用,Map数据才将视为同一个键.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"></span><br><span class="line">map.set([<span class="string">'a'</span>], <span class="number">555</span>);</span><br><span class="line">map.get([<span class="string">'a'</span>]) <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//例二</span></span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> k1 = [<span class="string">'a'</span>];</span><br><span class="line"><span class="keyword">const</span> k2 = [<span class="string">'a'</span>];</span><br><span class="line"></span><br><span class="line">map</span><br><span class="line">.set(k1, <span class="number">111</span>)</span><br><span class="line">.set(k2, <span class="number">222</span>);</span><br><span class="line"></span><br><span class="line">map.get(k1) <span class="comment">// 111</span></span><br><span class="line">map.get(k2) <span class="comment">// 222</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="实例属性和操作方法"><a href="#实例属性和操作方法" class="headerlink" title="实例属性和操作方法"></a>实例属性和操作方法</h4><ul>
+<li>属性<ul>
+<li>size 返回Map数据成员的总数</li>
+<li>Map.prototype.set(key,value)</li>
+<li>Map.prototype.get(key) <code>get</code> 方法读取<code>key</code> 对应的键值.如果找不到<code>key</code> ,返回<code>undefined</code> </li>
+<li>Map.prototype.has(key) 返回一个布尔值</li>
+<li>Map.prototype.delete(key) 返回一个布尔值</li>
+<li>Map.prototype.clearn() 没有返回值</li>
+</ul>
+</li>
+<li>遍历方法<ul>
+<li><code>Map.prototype.keys()</code>：返回键名的遍历器。</li>
+<li><code>Map.prototype.values()</code>：返回键值的遍历器。</li>
+<li><code>Map.prototype.entries()</code>：返回所有成员的遍历器。</li>
+<li><code>Map.prototype.forEach()</code>：遍历 Map 的所有成员。</li>
+</ul>
+</li>
+</ul>
+<h4 id="与其他数据结构的相互转换"><a href="#与其他数据结构的相互转换" class="headerlink" title="与其他数据结构的相互转换"></a>与其他数据结构的相互转换</h4><ul>
+<li><p>Map转换成数组</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>()</span><br><span class="line">	.set(<span class="literal">true</span>,<span class="number">7</span>)</span><br><span class="line">	.set(&#123;<span class="attr">foo</span>:<span class="number">3</span>&#125;,[<span class="string">'abc'</span>]);</span><br><span class="line"></span><br><span class="line">[...myMap]</span><br><span class="line"><span class="comment">//[ [true,7],[ &#123;foo:3&#125;,['abc'] ] ]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数组转为Map</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Map</span>([</span><br><span class="line">    [<span class="literal">true</span>,<span class="number">7</span>],</span><br><span class="line">    [&#123;<span class="attr">foo</span>:<span class="number">3</span>&#125;,[<span class="string">'abc'</span>]]</span><br><span class="line">])</span><br><span class="line"><span class="comment">//Map&#123;</span></span><br><span class="line"><span class="comment">// true =&gt;7,</span></span><br><span class="line"><span class="comment">//Object&#123;foo:3&#125; =&gt;['abc']</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Map 转为对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strMapToObj</span>(<span class="params">strMap</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> obj = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> [k,v] <span class="keyword">of</span> strMap) &#123;</span><br><span class="line">    obj[k] = v;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>()</span><br><span class="line">  .set(<span class="string">'yes'</span>, <span class="literal">true</span>)</span><br><span class="line">  .set(<span class="string">'no'</span>, <span class="literal">false</span>);</span><br><span class="line">strMapToObj(myMap)</span><br><span class="line"><span class="comment">// &#123; yes: true, no: false &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>如果是非字符串的键名,键名就会被转成字符串,在作为对象的键名</strong></p>
+</li>
+<li><p>对象转为Map</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">objToMap</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> strMap = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">in</span> <span class="built_in">Object</span>.keys[obj])&#123;</span><br><span class="line">        strMap.set(i,key[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> strMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Map 转JSON</p>
+<ul>
+<li><p>Map的键名都是字符串,可以直接转为对象JSON.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strMapToJson</span>(<span class="params">strMap</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(strMapToObj(strMap));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>().set(<span class="string">'yes'</span>, <span class="literal">true</span>).set(<span class="string">'no'</span>, <span class="literal">false</span>);</span><br><span class="line">strMapToJson(myMap)</span><br><span class="line"><span class="comment">// '&#123;"yes":true,"no":false&#125;'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Map 的键名有非字符串，这时可以选择转为数组 JSON。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapToArrayJson</span>(<span class="params">map</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify([...map]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>().set(<span class="literal">true</span>, <span class="number">7</span>).set(&#123;<span class="attr">foo</span>: <span class="number">3</span>&#125;, [<span class="string">'abc'</span>]);</span><br><span class="line">mapToArrayJson(myMap)</span><br><span class="line"><span class="comment">// '[[true,7],[&#123;"foo":3&#125;,["abc"]]]'</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>JSON 转Map</p>
+<ul>
+<li><p>JSON 转为Map,正常情况下,所有的键名为字符串</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonToStrMap</span>(<span class="params">jsonStr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> objToStrMap(<span class="built_in">JSON</span>.parse(jsonStr));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jsonToStrMap(<span class="string">'&#123;"yes": true, "no": false&#125;'</span>)</span><br><span class="line"><span class="comment">// Map &#123;'yes' =&gt; true, 'no' =&gt; false&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>非字符串的需要转回成数组,然后再转换成Map数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonToMap</span>(<span class="params">jsonStr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Map</span>(<span class="built_in">JSON</span>.parse(jsonStr));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jsonToMap(<span class="string">'[[true,7],[&#123;"foo":3&#125;,["abc"]]]'</span>)</span><br><span class="line"><span class="comment">// Map &#123;true =&gt; 7, Object &#123;foo: 3&#125; =&gt; ['abc']&#125;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Iterator-和for…of循环"><a href="#Iterator-和for…of循环" class="headerlink" title="Iterator 和for…of循环"></a>Iterator 和for…of循环</h2><blockquote>
+<p>遍历器(Iterator) 提供一个接口,为各种不同数据结构提供统一的访问机制.任何数据结构只要部署 <code>Iterator</code> 接口,就可以完成遍历操作. </p>
+</blockquote>
+<h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3><h4 id="Iterator-遍历器-的概念"><a href="#Iterator-遍历器-的概念" class="headerlink" title="Iterator(遍历器)的概念"></a>Iterator(遍历器)的概念</h4><p><strong>作用:</strong> </p>
+<ul>
+<li>为各种数据提供统一的,简便的访问接口</li>
+<li>使数据结构的成员能够按照某种依次排序</li>
+<li>ES6创建一种新的遍历命令<code>for....of</code> 循环</li>
+</ul>
+<p><strong>Iterator 的遍历过程:</strong></p>
+<p>（1）创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象。</p>
+<p>（2）第一次调用指针对象的<code>next</code>方法，可以将指针指向数据结构的第一个成员。</p>
+<p>（3）第二次调用指针对象的<code>next</code>方法，指针就指向数据结构的第二个成员。</p>
+<p>（4）不断调用指针对象的<code>next</code>方法，直到它指向数据结构的结束位置。</p>
+<p>每一次调用<code>next</code>方法，都会返回数据结构的当前成员的信息。具体来说，就是返回一个包含<code>value</code>和<code>done</code>两个属性的对象。其中，<code>value</code>属性是当前成员的值，<code>done</code>属性是一个布尔值，表示遍历是否结束。</p>
+<h4 id="默认Iterator接口"><a href="#默认Iterator接口" class="headerlink" title="默认Iterator接口"></a>默认Iterator接口</h4><p>ES6 规定,默认的<code>Iterator</code> 接口部署在数据结构的<code>Symbol.iterator</code> 属性,只要数据结构具有<code>Symbol.iterator</code> 属性,就可以认为是’’可遍历的’’.</p>
+<ul>
+<li><p>原生具有<code>Iterator</code> 接口的数据结构如下:</p>
+<ul>
+<li>Array</li>
+<li>Map</li>
+<li>Set</li>
+<li>String</li>
+<li>TypedArray</li>
+<li>函数的 arguments 对象</li>
+<li>NodeList 对象</li>
+</ul>
+</li>
+<li><p>对象如果想要具备可被<code>for...of</code> 循环调用的<code>Iterator</code> 接口,就必须在<code>Symbol.iterator</code> 的属性上部署遍历器的生成方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RangeIterator</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(start, stop) &#123;</span><br><span class="line">    <span class="keyword">this</span>.value = start;</span><br><span class="line">    <span class="keyword">this</span>.stop = stop;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  [<span class="built_in">Symbol</span>.iterator]() &#123; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</span><br><span class="line"></span><br><span class="line">  next() &#123;</span><br><span class="line">    <span class="keyword">var</span> value = <span class="keyword">this</span>.value;</span><br><span class="line">    <span class="keyword">if</span> (value &lt; <span class="keyword">this</span>.stop) &#123;</span><br><span class="line">      <span class="keyword">this</span>.value++;</span><br><span class="line">      <span class="keyword">return</span> &#123;<span class="attr">done</span>: <span class="literal">false</span>, <span class="attr">value</span>: value&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="attr">done</span>: <span class="literal">true</span>, <span class="attr">value</span>: <span class="literal">undefined</span>&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">range</span>(<span class="params">start, stop</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> RangeIterator(start, stop);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> value <span class="keyword">of</span> range(<span class="number">0</span>, <span class="number">3</span>)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value); <span class="comment">// 0, 1, 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>为一个对象添加<code>Iterator</code> 接口</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    data:[<span class="string">'hello'</span>,<span class="string">"world"</span>],</span><br><span class="line">    [<span class="built_in">Symbol</span>.iterator]()&#123;</span><br><span class="line">        <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">			next()&#123;</span><br><span class="line">                <span class="keyword">if</span>(index&lt;self.data.length) &#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123;</span><br><span class="line">						value:self.data[index++],</span><br><span class="line">                        done:<span class="literal">false</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123;</span><br><span class="line">						value:<span class="literal">undefined</span>,</span><br><span class="line">                        done:<span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="调用-Iterator-接口的场合"><a href="#调用-Iterator-接口的场合" class="headerlink" title="调用 Iterator 接口的场合"></a>调用 Iterator 接口的场合</h4><blockquote>
+<p>在一些场景中会默认调用<code>Iterator</code> 接口</p>
+</blockquote>
+<ul>
+<li>解构赋值</li>
+<li>扩展运算符</li>
+<li>yield*</li>
+<li>其他场合<ul>
+<li>for…of</li>
+<li>Array.from()</li>
+<li>Map(), Set(), WeakMap(), WeakSet()（比如<code>new Map([[&#39;a&#39;,1],[&#39;b&#39;,2]])</code>）</li>
+<li>Promise.all()</li>
+<li>Promise.race()</li>
+</ul>
+</li>
+</ul>
+<h4 id="字符串的Iterator接口"><a href="#字符串的Iterator接口" class="headerlink" title="字符串的Iterator接口"></a>字符串的Iterator接口</h4><blockquote>
+<p>字符串是一个类似数组的对象,也具有Iterator接口</p>
+</blockquote>
+<h4 id="Iterator接口与Generator-函数"><a href="#Iterator接口与Generator-函数" class="headerlink" title="Iterator接口与Generator 函数"></a><code>Iterator</code>接口与<code>Generator</code> 函数</h4><p><code>Symbol.iterator</code> 最简单的实现,还是使用<code>Generator</code>函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> myIterable  = &#123;</span><br><span class="line">	[<span class="built_in">Symbol</span>.iterator]:<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">[...myIterable]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者采用下面的方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    *[<span class="built_in">Symbol</span>.iterator]()&#123;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="string">"hello"</span>;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="string">'world'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x <span class="keyword">of</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// "hello"</span></span><br><span class="line"><span class="comment">// "world"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="for-of循环"><a href="#for-of循环" class="headerlink" title="for...of循环"></a><code>for...of</code>循环</h3><blockquote>
+<p>只要数据结构部署<code>Symbol.iterator</code> 属性,就可以用<code>for...of</code> 循环遍历它的成员</p>
+</blockquote>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><ul>
+<li><p>数组原生具备<code>Iterator</code> 接口,<code>for...of</code> 循环本质上就是调用这个接口产生的遍历器</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr =[<span class="string">'red'</span>,<span class="string">'green'</span>,<span class="string">'blue'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> v <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v); <span class="comment">// red green blue</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="built_in">Symbol</span>.iterator] = arr[<span class="built_in">Symbol</span>.iterator].bind(arr);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> v <span class="keyword">of</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v); <span class="comment">// red green blue</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="Set-和-Map-结构"><a href="#Set-和-Map-结构" class="headerlink" title="Set 和 Map 结构"></a>Set 和 Map 结构</h4><h4 id="计算生成的数据结构"><a href="#计算生成的数据结构" class="headerlink" title="计算生成的数据结构"></a>计算生成的数据结构</h4><p>有些数据结构是在现有的数据结构的基础上,计算生成的.比如，ES6 的数组、Set、Map 都部署了以下三个方法，调用后都返回遍历器对象。</p>
+<ul>
+<li><code>entries()</code> 返回一个遍历器对象，用来遍历<code>[键名, 键值]</code>组成的数组。对于数组，键名就是索引值；对于 Set，键名与键值相同。Map 结构的 Iterator 接口，默认就是调用<code>entries</code>方法。</li>
+<li><code>keys()</code> 返回一个遍历器对象，用来遍历所有的键名。</li>
+<li><code>values()</code> 返回一个遍历器对象，用来遍历所有的键值。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> pair <span class="keyword">of</span> arr.entries()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(pair);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// [0, 'a']</span></span><br><span class="line"><span class="comment">// [1, 'b']</span></span><br><span class="line"><span class="comment">// [2, 'c']</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="类似于数组的对象"><a href="#类似于数组的对象" class="headerlink" title="类似于数组的对象"></a>类似于数组的对象</h4><ul>
+<li><p><code>for...of</code> 循环能正确识别32为的UTF_16字符</p>
+</li>
+<li><p>并不是所有的类似于数组的对象都具有<code>Iterator</code> 接口,解决办法就是使用<code>Array.from</code> 方法转为数组</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arrayLike = &#123; <span class="attr">length</span>: <span class="number">2</span>, <span class="number">0</span>: <span class="string">'a'</span>, <span class="number">1</span>: <span class="string">'b'</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x <span class="keyword">of</span> arrayLike) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x <span class="keyword">of</span> <span class="built_in">Array</span>.from(arrayLike)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h4><p>对于普通对象,<code>for...of</code> 结构不能直接使用,必须要部署了<code>Iterator</code> 接口后才能使用.但是,在这种情况下,<strong><code>for...in</code>循环依然可以用来遍历键名</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> es6 = &#123;</span><br><span class="line">  edition: <span class="number">6</span>,</span><br><span class="line">  committee: <span class="string">"TC39"</span>,</span><br><span class="line">  standard: <span class="string">"ECMA-262"</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> e <span class="keyword">in</span> es6) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// edition</span></span><br><span class="line"><span class="comment">// committee</span></span><br><span class="line"><span class="comment">// standard</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> e <span class="keyword">of</span> es6) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// TypeError: es6[Symbol.iterator] is not a function</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>解决办法:</strong></p>
+<ul>
+<li><p>使用<code>Object.keys</code> 方法将对象的键名生成一个数组,然后遍历这个数组</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">of</span> <span class="built_in">Object</span>.keys(someObject)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key + <span class="string">': '</span> + someObject[key]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>另一个方法是使用<code>Generator</code>函数包装对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">entries</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">of</span> <span class="built_in">Object</span>.keys(obj))&#123;</span><br><span class="line">		<span class="keyword">yield</span> [key,obj[key]];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> [key,value] <span class="keyword">of</span> entries(obj))&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(kry,<span class="string">'-&gt;'</span>,value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//a -&gt;1</span></span><br><span class="line"><span class="comment">//b -&gt;2</span></span><br><span class="line"><span class="comment">//c -&gt;3</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="与其他遍历语法的对比"><a href="#与其他遍历语法的对比" class="headerlink" title="与其他遍历语法的对比"></a>与其他遍历语法的对比</h4><ul>
+<li><p>for 循环     </p>
+<ul>
+<li>写法比较麻烦</li>
+</ul>
+</li>
+<li><p>数组内置的<code>forEach</code>   </p>
+<ul>
+<li>无法中途跳出<code>forEach</code>循环,break和return命令都不行</li>
+</ul>
+</li>
+<li><p><code>for...in</code>  可以遍历数组的键名</p>
+<ul>
+<li>数组的键名是数字.但是<code>for...in</code> 循环是以字符串作为键名’’0’’,”1”,”2”</li>
+<li><code>for...in</code> 循环不仅遍历数字键名还会遍历添加其他键,包括原型链上的键</li>
+<li>在某些情况下,<code>for...in</code> 循环会以任意顺序遍历键名</li>
+<li><code>for...in</code> 循环主要是为遍历对象而设计的,不适用于遍历数组</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><code>for...of</code>循环的优点</p>
+<ul>
+<li>语法简洁</li>
+<li>可以与break.continue和return配合使用</li>
+<li>提供遍历所有数据接口的统一操作接口</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/30/TypeScript基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -651,7 +1070,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/04/webpack初步配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/08/webpack初步配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tang Shuai">
@@ -670,7 +1089,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/07/04/webpack初步配置/" itemprop="url">webpack基础</a></h1>
+                <a class="post-title-link" href="/2019/07/08/webpack初步配置/" itemprop="url">webpack基础</a></h1>
         
 
         <div class="post-meta">
@@ -682,8 +1101,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-04T18:38:57+08:00">
-                2019-07-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-08T13:51:22+08:00">
+                2019-07-08
               </time>
             
 
@@ -958,7 +1377,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -969,7 +1388,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
