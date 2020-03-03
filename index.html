@@ -550,7 +550,36 @@
 <p><code>options</code> 通常用于，在跨域请求前发起的预检请求，已检验请求是否被服务器接受</p>
 </blockquote>
 <h4 id="http常见的请求头"><a href="#http常见的请求头" class="headerlink" title="http常见的请求头"></a>http常见的请求头</h4><p>请求头：<br><img src="/images/%E8%AF%B7%E6%B1%82%E5%A4%B4.png" alt="请求头"><br>响应头：<br><img src="/images/%E5%93%8D%E5%BA%94%E5%A4%B4.png" alt="响应头"></p>
-
+<ul>
+<li><p>报文提交<code>Content-Type</code> 的几种区别：</p>
+<ul>
+<li><p><code>application/json</code>: json字符串</p>
+</li>
+<li><p><code>application/x-www-form-urlencoded</code>: &amp;将<code>key=value</code> 进行拼接</p>
+</li>
+<li><p><code>multipart/form-data</code>：jquery默认使用，常用于文件上传</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="前端安全规范"><a href="#前端安全规范" class="headerlink" title="前端安全规范"></a>前端安全规范</h3><blockquote>
+<p>前端安全主要分为<code>XSS</code>和<code>CSRF</code></p>
+</blockquote>
+<h4 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a><code>XSS</code></h4><blockquote>
+<p>跨站脚本攻击，攻击者将一段可执行的代码注入到网页中，如链接，输入框，分为持久性和临时性的，持久性的是恶意代码被存储到数据库中，会造成持久的攻击；临时性的是仅在当前被工具页面上生效</p>
+</blockquote>
+<p><strong>防范方式</strong>：对与网页上获取的内容要做转义处理</p>
+<h4 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a><code>CSRF</code></h4><blockquote>
+<p>跨站请求伪造，构造一个钓鱼网站，利用站点对浏览器的信任，从而欺骗用户，发起恶意操作</p>
+</blockquote>
+<p>用户在浏览器登录后，站点是信任浏览器的，但浏览器是没法知道请求是否是用户自愿发起的，站点信任后，所发起的请求浏览器都是信任的。</p>
+<p>那么用户在已登录的情况下，钓鱼站点中发起跨域请求，跨域标签或者form表单，就会把用户的认证信息cookies带上，从而达到伪造用户身份进行攻击</p>
+<p><strong>防范方式</strong>：</p>
+<ul>
+<li>服务端校验Referer，但某些浏览器可能可以修改Referer</li>
+<li>随机token，每访问页面就生成一个token，页面中的请求把这个token带上，服务端对token进行校验，注意这个token不能存储在cookie中</li>
+</ul>
+<h3 id="跨域解决方案"><a href="#跨域解决方案" class="headerlink" title="跨域解决方案"></a>跨域解决方案</h3>
           
         
       

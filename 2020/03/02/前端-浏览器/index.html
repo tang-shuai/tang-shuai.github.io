@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://yoursite.com/images/TSL%E6%8F%A1%E6%89%8B%E4%BC%A0%E8%BE%93.png">
 <meta property="og:image" content="http://yoursite.com/images/%E8%AF%B7%E6%B1%82%E5%A4%B4.png">
 <meta property="og:image" content="http://yoursite.com/images/%E5%93%8D%E5%BA%94%E5%A4%B4.png">
-<meta property="og:updated_time" content="2020-03-03T08:44:16.672Z">
+<meta property="og:updated_time" content="2020-03-03T09:28:10.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端-浏览器">
 <meta name="twitter:description" content="浏览器缓存 缓存介绍 缓存分为强缓存和协商缓存,流程图  缓存机制相关的字段都是在请求和响应头上 请求头:   强缓存 强缓存，在缓存有效期内，客户端直接读取本地资源 强缓存返回状态码是200  Expries 在http1.0 中使用，表示资源失效的具体时间点 Expires:Sat, 09 Jun 2018 08:13:56 GMT。若访问器和本地时间不一样，在现在的http 1.1 中换成了">
@@ -553,7 +553,36 @@
 <p><code>options</code> 通常用于，在跨域请求前发起的预检请求，已检验请求是否被服务器接受</p>
 </blockquote>
 <h4 id="http常见的请求头"><a href="#http常见的请求头" class="headerlink" title="http常见的请求头"></a>http常见的请求头</h4><p>请求头：<br><img src="/images/%E8%AF%B7%E6%B1%82%E5%A4%B4.png" alt="请求头"><br>响应头：<br><img src="/images/%E5%93%8D%E5%BA%94%E5%A4%B4.png" alt="响应头"></p>
-
+<ul>
+<li><p>报文提交<code>Content-Type</code> 的几种区别：</p>
+<ul>
+<li><p><code>application/json</code>: json字符串</p>
+</li>
+<li><p><code>application/x-www-form-urlencoded</code>: &amp;将<code>key=value</code> 进行拼接</p>
+</li>
+<li><p><code>multipart/form-data</code>：jquery默认使用，常用于文件上传</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="前端安全规范"><a href="#前端安全规范" class="headerlink" title="前端安全规范"></a>前端安全规范</h3><blockquote>
+<p>前端安全主要分为<code>XSS</code>和<code>CSRF</code></p>
+</blockquote>
+<h4 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a><code>XSS</code></h4><blockquote>
+<p>跨站脚本攻击，攻击者将一段可执行的代码注入到网页中，如链接，输入框，分为持久性和临时性的，持久性的是恶意代码被存储到数据库中，会造成持久的攻击；临时性的是仅在当前被工具页面上生效</p>
+</blockquote>
+<p><strong>防范方式</strong>：对与网页上获取的内容要做转义处理</p>
+<h4 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a><code>CSRF</code></h4><blockquote>
+<p>跨站请求伪造，构造一个钓鱼网站，利用站点对浏览器的信任，从而欺骗用户，发起恶意操作</p>
+</blockquote>
+<p>用户在浏览器登录后，站点是信任浏览器的，但浏览器是没法知道请求是否是用户自愿发起的，站点信任后，所发起的请求浏览器都是信任的。</p>
+<p>那么用户在已登录的情况下，钓鱼站点中发起跨域请求，跨域标签或者form表单，就会把用户的认证信息cookies带上，从而达到伪造用户身份进行攻击</p>
+<p><strong>防范方式</strong>：</p>
+<ul>
+<li>服务端校验Referer，但某些浏览器可能可以修改Referer</li>
+<li>随机token，每访问页面就生成一个token，页面中的请求把这个token带上，服务端对token进行校验，注意这个token不能存储在cookie中</li>
+</ul>
+<h3 id="跨域解决方案"><a href="#跨域解决方案" class="headerlink" title="跨域解决方案"></a>跨域解决方案</h3>
       
     </div>
     
@@ -710,7 +739,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器"><span class="nav-number">1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.0.1.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PWA"><span class="nav-number">1.0.2.</span> <span class="nav-text">PWA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-输入到渲染的过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">URL 输入到渲染的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重绘和回流-重排"><span class="nav-number">1.0.4.</span> <span class="nav-text">重绘和回流(重排)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Http和Https协议"><span class="nav-number">1.0.5.</span> <span class="nav-text">Http和Https协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#http协议"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">http协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP"><span class="nav-number">1.0.5.2.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP"><span class="nav-number">1.0.5.3.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#https"><span class="nav-number">1.0.5.4.</span> <span class="nav-text">https</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TLS-握手"><span class="nav-number">1.0.5.5.</span> <span class="nav-text">TLS 握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么情况下会触发options请求"><span class="nav-number">1.0.5.6.</span> <span class="nav-text">什么情况下会触发options请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http常见的请求头"><span class="nav-number">1.0.5.7.</span> <span class="nav-text">http常见的请求头</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器"><span class="nav-number">1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.0.1.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PWA"><span class="nav-number">1.0.2.</span> <span class="nav-text">PWA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-输入到渲染的过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">URL 输入到渲染的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重绘和回流-重排"><span class="nav-number">1.0.4.</span> <span class="nav-text">重绘和回流(重排)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Http和Https协议"><span class="nav-number">1.0.5.</span> <span class="nav-text">Http和Https协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#http协议"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">http协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP"><span class="nav-number">1.0.5.2.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP"><span class="nav-number">1.0.5.3.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#https"><span class="nav-number">1.0.5.4.</span> <span class="nav-text">https</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TLS-握手"><span class="nav-number">1.0.5.5.</span> <span class="nav-text">TLS 握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么情况下会触发options请求"><span class="nav-number">1.0.5.6.</span> <span class="nav-text">什么情况下会触发options请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http常见的请求头"><span class="nav-number">1.0.5.7.</span> <span class="nav-text">http常见的请求头</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端安全规范"><span class="nav-number">1.0.6.</span> <span class="nav-text">前端安全规范</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XSS"><span class="nav-number">1.0.6.1.</span> <span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSRF"><span class="nav-number">1.0.6.2.</span> <span class="nav-text">CSRF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨域解决方案"><span class="nav-number">1.0.7.</span> <span class="nav-text">跨域解决方案</span></a></li></ol></li></ol></div>
             
 
           </div>
