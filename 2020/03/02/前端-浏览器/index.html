@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="浏览器缓存 缓存介绍 缓存分为强缓存和协商缓存,流程图  缓存机制相关的字段都是在请求和响应头上 请求头:   强缓存 强缓存，在缓存有效期内，客户端直接读取本地资源 强缓存返回状态码是200  Expries 在http1.0 中使用，表示资源失效的具体时间点 Expires:Sat, 09 Jun 2018 08:13:56 GMT。若访问器和本地时间不一样，在现在的http 1.1 中换成了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端-浏览器">
+<meta property="og:url" content="http://yoursite.com/2020/03/02/前端-浏览器/index.html">
+<meta property="og:site_name" content="个人博客">
+<meta property="og:description" content="浏览器缓存 缓存介绍 缓存分为强缓存和协商缓存,流程图  缓存机制相关的字段都是在请求和响应头上 请求头:   强缓存 强缓存，在缓存有效期内，客户端直接读取本地资源 强缓存返回状态码是200  Expries 在http1.0 中使用，表示资源失效的具体时间点 Expires:Sat, 09 Jun 2018 08:13:56 GMT。若访问器和本地时间不一样，在现在的http 1.1 中换成了">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82.png">
+<meta property="og:image" content="http://yoursite.com/images/%E7%BC%93%E5%AD%98%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:updated_time" content="2020-03-03T01:43:35.770Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端-浏览器">
+<meta name="twitter:description" content="浏览器缓存 缓存介绍 缓存分为强缓存和协商缓存,流程图  缓存机制相关的字段都是在请求和响应头上 请求头:   强缓存 强缓存，在缓存有效期内，客户端直接读取本地资源 强缓存返回状态码是200  Expries 在http1.0 中使用，表示资源失效的具体时间点 Expires:Sat, 09 Jun 2018 08:13:56 GMT。若访问器和本地时间不一样，在现在的http 1.1 中换成了">
+<meta name="twitter:image" content="http://yoursite.com/images/%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/02/前端-浏览器/">
+
+
+
+
+
+  <title>前端-浏览器 | 个人博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/02/前端-浏览器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tang Shuai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/headPortrait.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端-浏览器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-02T11:32:39+08:00">
+                2020-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/浏览器/" itemprop="url" rel="index">
+                    <span itemprop="name">浏览器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h1><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
+<li><p>缓存介绍</p>
+<p>缓存分为强缓存和协商缓存,流程图</p>
+<p><img src="/images/%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82.png" alt="访问请求"></p>
+<p>缓存机制相关的字段都是在请求和响应头上</p>
+<p>请求头:</p>
+<p><img src="/images/%E7%BC%93%E5%AD%98%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="缓存流程图"></p>
+</li>
+<li><p>强缓存</p>
+<p>强缓存，在缓存有效期内，客户端直接读取本地资源</p>
+<p>强缓存返回状态码是200</p>
+<ul>
+<li><p>Expries</p>
+<p>在<code>http1.0</code> 中使用，表示资源失效的具体时间点 <code>Expires:Sat, 09 Jun 2018 08:13:56 GMT</code>。若访问器和本地时间不一样，在现在的<code>http 1.1</code> 中换成了<code>max-age</code></p>
+</li>
+<li><p>Cache-contol</p>
+<p>指定指令来是先缓存</p>
+<ul>
+<li><code>max-age:</code> 强缓存的有效时间，单位秒max-age=30672000</li>
+<li><code>no-cache:</code> 不使用本地缓存。需要使用缓存协商，先于服务器确认返回的响应是否被，如果之前的响应中存在ETag，那么请求的时候会与服务端验证，如果未被更改，则可以避免重新你下载</li>
+<li><code>no-store:</code> 直接禁止浏览器缓存数据，每次用户请求该资源，都会向服务端发送一个 请求，每次都会下载完整的资源</li>
+<li><code>public:</code>  可以被所有的用户缓存，包括用户和CDN等中间代理服务器</li>
+<li><code>private:</code> 只能被终端用户的浏览器缓存，不允许CDN等中继缓存服务器对其缓存</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>协商缓存</p>
+<ul>
+<li><p>协商缓存，在使用本地缓存之前，需要先跟服务器做个对比，服务器告知你的资源可用，就可以直接使用本地资源。反之，服务器返回最新的资源给客户端，客户端收到后会更新本地资源</p>
+<ul>
+<li>状态码：<ul>
+<li>若本地资源是最新的，返回304.</li>
+<li>重新获取资源，就正常返回200</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Last-modified If-Modified-Since</code></p>
+<p>采用资源最后修改时间来判断，单位精确到秒</p>
+<p><code>Last-Modified:</code> 服务器资源的最新更新时间<code>Tue,14 Jan 2020 09:18:29 GMT</code></p>
+<p><code>If-Modified-Since:</code>发起协商，把本地的记录文件更新时间传给服务器，服务器进行判断比较</p>
+<p>这个判断方式是<code>http</code> 1.0的产物,精确到秒，若文件的更新频率在秒级以内，就会出现文件不一致</p>
+</li>
+<li><p><code>ETag If-None-Match</code></p>
+<p>为了解决上面的问题，<code>http</code> 1.1加了这组标记</p>
+<p><code>ETage:</code> 服务器根据内容生成唯一的字符串标识</p>
+<p><code>If-None-Match</code>: 发起协商，把本地的hash标识传给服务器，服务器进行判断比较</p>
+</li>
+</ul>
+</li>
+<li><p>浏览器缓存存放位置</p>
+<p>缓存的两个来源：</p>
+<ul>
+<li><code>memory cache</code>:内存中读取</li>
+<li><code>disk cache</code>: 硬盘中读取 </li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/19/webpack核心内容/" rel="next" title="webpack基础配置">
+                <i class="fa fa-chevron-left"></i> webpack基础配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/headPortrait.jpg" alt="Tang Shuai">
+            
+              <p class="site-author-name" itemprop="name">Tang Shuai</p>
+              <p class="site-description motion-element" itemprop="description">You are more than what you have become now，remember who you are.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器"><span class="nav-number">1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.0.1.</span> <span class="nav-text">缓存</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tang Shuai</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
