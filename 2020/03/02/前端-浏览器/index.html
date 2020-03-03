@@ -89,7 +89,10 @@
 <meta property="og:image" content="http://yoursite.com/images/%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82.png">
 <meta property="og:image" content="http://yoursite.com/images/%E7%BC%93%E5%AD%98%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
 <meta property="og:image" content="http://yoursite.com/images/html%E5%92%8Ccss%E7%BB%98%E5%88%B6%E5%9B%BE.png">
-<meta property="og:updated_time" content="2020-03-03T03:05:44.379Z">
+<meta property="og:image" content="http://yoursite.com/images/TSL%E6%8F%A1%E6%89%8B%E4%BC%A0%E8%BE%93.png">
+<meta property="og:image" content="http://yoursite.com/images/%E8%AF%B7%E6%B1%82%E5%A4%B4.png">
+<meta property="og:image" content="http://yoursite.com/images/%E5%93%8D%E5%BA%94%E5%A4%B4.png">
+<meta property="og:updated_time" content="2020-03-03T08:44:16.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端-浏览器">
 <meta name="twitter:description" content="浏览器缓存 缓存介绍 缓存分为强缓存和协商缓存,流程图  缓存机制相关的字段都是在请求和响应头上 请求头:   强缓存 强缓存，在缓存有效期内，客户端直接读取本地资源 强缓存返回状态码是200  Expries 在http1.0 中使用，表示资源失效的具体时间点 Expires:Sat, 09 Jun 2018 08:13:56 GMT。若访问器和本地时间不一样，在现在的http 1.1 中换成了">
@@ -467,6 +470,89 @@
 <li>连接结束</li>
 </ul>
 <h3 id="重绘和回流-重排"><a href="#重绘和回流-重排" class="headerlink" title="重绘和回流(重排)"></a>重绘和回流(重排)</h3><p>html文档和css渲染过程的图：<br>  <img src="/images/html%E5%92%8Ccss%E7%BB%98%E5%88%B6%E5%9B%BE.png" alt="html和css绘制图"></p>
+<p><strong>重绘：</strong> 对元素的外观做处理</p>
+<p><strong>回流：</strong> 页面采用流式布局来绘制，当一个节点空间属性发生变化，会影响到其他节点的空间布局，需要重新收集节点信息，在进行绘制。</p>
+<p>所以回流一定会触发重绘</p>
+<ul>
+<li><p>回流的优化</p>
+<blockquote>
+<p>对树的局部甚至全局重新生成是非常耗性能的，所以要避免频繁触发回流</p>
+</blockquote>
+<ul>
+<li>现代浏览器已经帮我们做了很多的优化，采用队列存储多次的回流操作，然后批量执行，但获取布局信息除外，因为要获取实时的数值，浏览器就必须要清空队列，立即执行回流</li>
+<li>避免连续多次修改，可以合并修改，一次修改</li>
+<li>对于大量不同得DOM修改，可以优先脱离文档流使用定位，或者<code>display：none</code> ,在文档流外修改完成后再放回文档中</li>
+<li>通过节流和防抖控制触发频率</li>
+<li>css3硬件加速，<code>transform</code>,<code>opacity</code>,<code>filters</code>,开启后，会重新渲染层</li>
+</ul>
+</li>
+<li><p>开启GPU加速的方法</p>
+<blockquote>
+<p>开启后，会将<code>dom</code> 元素提升为独立的渲染层，它的变化不会在影响文档流中的布局</p>
+</blockquote>
+<ul>
+<li>transform：translateZ(0)</li>
+<li>opacity</li>
+<li>filters</li>
+<li>Will-change</li>
+</ul>
+</li>
+</ul>
+<h3 id="Http和Https协议"><a href="#Http和Https协议" class="headerlink" title="Http和Https协议"></a><code>Http</code>和<code>Https</code>协议</h3><h4 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a><code>http</code>协议</h4><blockquote>
+<p><code>http</code> 是建立在<code>TCP</code> 上的应用层协议，曹文本传送协议</p>
+</blockquote>
+<ul>
+<li><code>http1.0</code>:客户端的每次请求都要求建立一次单独的连接，在处理完本次请求后自动释放连接</li>
+<li><code>http1.1</code>:可以在一次连接中处理多个请求，并且多个请求可以重叠进行，不需要等待一个请求结束后在发送下一个请求</li>
+<li><code>http2.0</code>:可支持多路复用，一个<code>tcp</code> 可同时传输多个<code>http</code> 请求，头部数据还做了压缩</li>
+</ul>
+<h4 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><code>TCP</code></h4><blockquote>
+<p><code>tcp</code> 是传输层协议，特点是：<strong>三次握手</strong>和<strong>四次挥手</strong></p>
+</blockquote>
+<ul>
+<li><p>三次握手建立连接：</p>
+<ul>
+<li>客户端发送位码为syn=1，随机产生数据包到服务器，服务器有SYN=1知道客户端要求建立联机(客户端：我要链接你)</li>
+<li>服务器收到请求后要确认联机信息，向A发送ack number=(客户端的seq+1)，syn=1，ack=1随机生成数据包（服务器：好的，你来链接吧）</li>
+<li>客户端收到后检查ack number是否正确，即第一次发送的seq number+1,一级位码ack是否为1，若正确则建立连接</li>
+</ul>
+</li>
+<li><p>四次挥手断开连接的过程：</p>
+<ul>
+<li>客户端发送请求给服务端，申请主动断开连接，进入等待状态，不在往服务端发送数据，但是接受数据（客户端：我要断开连接了）</li>
+<li>服务端收到后，告知客户端知道了，服务端进行等待状态，不在接收数据，但是可以继续发送数据（服务端：好，我知道了，但是要等一等）</li>
+<li>客户端收到服务端的告知后，进入下一阶段的等待（客户端：好，我等）</li>
+<li>服务端完成剩余数据的发送后，告知客户端可以断开了，服务端不接收和读取数据（服务端：你可以断开了）</li>
+<li>客户端收到后，告知服务端，已收到，然后释放链接（客户端：好的，我断开了）</li>
+<li>服务端收到后，也释放链接</li>
+</ul>
+</li>
+</ul>
+<h4 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h4><blockquote>
+<p>传输层的另外一个协议UDP被称为用户数据报协议，无连接的传输协议</p>
+</blockquote>
+<p>  <code>UDP</code> 是报文的搬运工，不需要建立完全可靠的链接，不保证数据的可靠性，因为协议控制项比较少，且报文头部简单，报文体积相对较小，速度上相比更快，实时性更高，比如电话会议，多媒体数据流才用的就是UDP。</p>
+<h4 id="https"><a href="#https" class="headerlink" title="https"></a><code>https</code></h4><blockquote>
+<p><code>http</code> 报文传输过程中是铭文的，可以通过抓包的方式看到报文内容，这就暴露一个安全问题，为了解决这个问题，就有了<code>TLS</code> ,<code>https = http+TLS</code></p>
+</blockquote>
+<p><code>TLS</code>: 安全传输层协议，用于在两个通信应用程序之间提供保密性和数据的完整性，该协议由两层组成：<code>TSL</code> 记录协议和<code>TLS</code> 握手协议</p>
+<p><code>TLS</code>利用非对称加密演算来对通信方做身份的认证，之后交换对称密钥作为会谈的密钥（<code>Sessionkey</code>),因此https分成两个阶段</p>
+<ul>
+<li>通过非对称加解密确认对方身份是否合法，若合法生成会话密钥</li>
+<li>报文的在发送前，先用会话密钥进行对称加密在传输</li>
+</ul>
+<h4 id="TLS-握手"><a href="#TLS-握手" class="headerlink" title="TLS 握手"></a><code>TLS</code> 握手</h4><p>步骤如下：</p>
+<ul>
+<li>客户端请求服务端建立<code>SSL</code> 链接，服务端并向客户端发送一个随机数<code>randomC</code> 和<code>CA</code> 机构颁发的证书</li>
+<li>客户端对证书进行验证，验证通过后，生成一个随机数<code>randomS</code>，用公钥对<code>randomS</code> 加密，同时用<code>randomS</code> 生成一段签名，发送给服务端</li>
+<li>服务端接收到后，用私钥对密文解密，用解密后的key生成签名，并对客户端传来的签名进行比较，检验通过后，然后生成一个随机数<code>randomP</code> ,并对私钥加密，还有随机数生成的hash值，一并发送给客户端</li>
+<li>客户端用公钥解密，并验证 hash通过后，两端利用 <code>randomC</code> <code>randomS</code> <code>ramdomP</code> 通过一定的算法生成<code>session key</code> ，后续的报文将通过<code>session key</code> 对称加密进行传输</li>
+</ul>
+<p>图：<br><img src="/images/TSL%E6%8F%A1%E6%89%8B%E4%BC%A0%E8%BE%93.png" alt="TSL握手传输"></p>
+<h4 id="什么情况下会触发options请求"><a href="#什么情况下会触发options请求" class="headerlink" title="什么情况下会触发options请求"></a>什么情况下会触发options请求</h4><blockquote>
+<p><code>options</code> 通常用于，在跨域请求前发起的预检请求，已检验请求是否被服务器接受</p>
+</blockquote>
+<h4 id="http常见的请求头"><a href="#http常见的请求头" class="headerlink" title="http常见的请求头"></a>http常见的请求头</h4><p>请求头：<br><img src="/images/%E8%AF%B7%E6%B1%82%E5%A4%B4.png" alt="请求头"><br>响应头：<br><img src="/images/%E5%93%8D%E5%BA%94%E5%A4%B4.png" alt="响应头"></p>
 
       
     </div>
@@ -624,7 +710,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器"><span class="nav-number">1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.0.1.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PWA"><span class="nav-number">1.0.2.</span> <span class="nav-text">PWA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-输入到渲染的过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">URL 输入到渲染的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重绘和回流-重排"><span class="nav-number">1.0.4.</span> <span class="nav-text">重绘和回流(重排)</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器"><span class="nav-number">1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.0.1.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PWA"><span class="nav-number">1.0.2.</span> <span class="nav-text">PWA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-输入到渲染的过程"><span class="nav-number">1.0.3.</span> <span class="nav-text">URL 输入到渲染的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重绘和回流-重排"><span class="nav-number">1.0.4.</span> <span class="nav-text">重绘和回流(重排)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Http和Https协议"><span class="nav-number">1.0.5.</span> <span class="nav-text">Http和Https协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#http协议"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">http协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP"><span class="nav-number">1.0.5.2.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP"><span class="nav-number">1.0.5.3.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#https"><span class="nav-number">1.0.5.4.</span> <span class="nav-text">https</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TLS-握手"><span class="nav-number">1.0.5.5.</span> <span class="nav-text">TLS 握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么情况下会触发options请求"><span class="nav-number">1.0.5.6.</span> <span class="nav-text">什么情况下会触发options请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http常见的请求头"><span class="nav-number">1.0.5.7.</span> <span class="nav-text">http常见的请求头</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
