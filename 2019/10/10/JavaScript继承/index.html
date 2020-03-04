@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="JavaScript继承父类 想要继承必须提供父类(继承谁,提供继承的属性)  12345678function Person(name)&amp;#123; //构造函数添加参数	this.name = name;    this.sum = function()&amp;#123;		console.log(this.name)    &amp;#125;&amp;#125;Person.prototype.age = 10">
+<meta name="description" content="JavaScript继承 JavaScript 的继承的几种方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="css样式">
 <meta property="og:url" content="http://yoursite.com/2019/10/10/JavaScript继承/index.html">
 <meta property="og:site_name" content="个人博客">
-<meta property="og:description" content="JavaScript继承父类 想要继承必须提供父类(继承谁,提供继承的属性)  12345678function Person(name)&amp;#123; //构造函数添加参数	this.name = name;    this.sum = function()&amp;#123;		console.log(this.name)    &amp;#125;&amp;#125;Person.prototype.age = 10">
+<meta property="og:description" content="JavaScript继承 JavaScript 的继承的几种方法">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-11T03:22:49.338Z">
+<meta property="og:updated_time" content="2020-03-04T06:05:52.498Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="css样式">
-<meta name="twitter:description" content="JavaScript继承父类 想要继承必须提供父类(继承谁,提供继承的属性)  12345678function Person(name)&amp;#123; //构造函数添加参数	this.name = name;    this.sum = function()&amp;#123;		console.log(this.name)    &amp;#125;&amp;#125;Person.prototype.age = 10">
+<meta name="twitter:description" content="JavaScript继承 JavaScript 的继承的几种方法">
 
 
 
@@ -351,7 +351,12 @@
       
 
       
-        <h2 id="JavaScript继承"><a href="#JavaScript继承" class="headerlink" title="JavaScript继承"></a>JavaScript继承</h2><h3 id="父类"><a href="#父类" class="headerlink" title="父类"></a>父类</h3><blockquote>
+        <h2 id="JavaScript继承"><a href="#JavaScript继承" class="headerlink" title="JavaScript继承"></a>JavaScript继承</h2><blockquote>
+<p>JavaScript 的继承的几种方法</p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="父类"><a href="#父类" class="headerlink" title="父类"></a>父类</h3><blockquote>
 <p>想要继承必须提供父类(继承谁,提供继承的属性)</p>
 </blockquote>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>)</span>&#123; <span class="comment">//构造函数添加参数</span></span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.sum = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype.age = <span class="number">10</span> <span class="comment">//给构造函数添加原型属性</span></span><br></pre></td></tr></table></figure>
@@ -604,6 +609,8 @@
   
 
 
+  
+
 
 
 
@@ -642,6 +649,11 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 

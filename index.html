@@ -354,233 +354,16 @@
 
       
         
-          
-            <h1 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h1><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
-<li><p>缓存介绍</p>
-<p>缓存分为强缓存和协商缓存,流程图</p>
-<p><img src="/images/%E8%AE%BF%E9%97%AE%E8%AF%B7%E6%B1%82.png" alt="访问请求"></p>
-<p>缓存机制相关的字段都是在请求和响应头上</p>
-<p>请求头:</p>
-<p><img src="/images/%E7%BC%93%E5%AD%98%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="缓存流程图"></p>
-</li>
-<li><p>强缓存</p>
-<p>强缓存，在缓存有效期内，客户端直接读取本地资源</p>
-<p>强缓存返回状态码是200</p>
-<ul>
-<li><p>Expries</p>
-<p>在<code>http1.0</code> 中使用，表示资源失效的具体时间点 <code>Expires:Sat, 09 Jun 2018 08:13:56 GMT</code>。若访问器和本地时间不一样，在现在的<code>http 1.1</code> 中换成了<code>max-age</code></p>
-</li>
-<li><p>Cache-contol</p>
-<p>指定指令来是先缓存</p>
-<ul>
-<li><code>max-age:</code> 强缓存的有效时间，单位秒max-age=30672000</li>
-<li><code>no-cache:</code> 不使用本地缓存。需要使用缓存协商，先于服务器确认返回的响应是否被，如果之前的响应中存在ETag，那么请求的时候会与服务端验证，如果未被更改，则可以避免重新你下载</li>
-<li><code>no-store:</code> 直接禁止浏览器缓存数据，每次用户请求该资源，都会向服务端发送一个 请求，每次都会下载完整的资源</li>
-<li><code>public:</code>  可以被所有的用户缓存，包括用户和CDN等中间代理服务器</li>
-<li><code>private:</code> 只能被终端用户的浏览器缓存，不允许CDN等中继缓存服务器对其缓存</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>协商缓存</p>
-<ul>
-<li><p>协商缓存，在使用本地缓存之前，需要先跟服务器做个对比，服务器告知你的资源可用，就可以直接使用本地资源。反之，服务器返回最新的资源给客户端，客户端收到后会更新本地资源</p>
-<ul>
-<li>状态码：<ul>
-<li>若本地资源是最新的，返回304.</li>
-<li>重新获取资源，就正常返回200</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Last-modified If-Modified-Since</code></p>
-<p>采用资源最后修改时间来判断，单位精确到秒</p>
-<p><code>Last-Modified:</code> 服务器资源的最新更新时间<code>Tue,14 Jan 2020 09:18:29 GMT</code></p>
-<p><code>If-Modified-Since:</code>发起协商，把本地的记录文件更新时间传给服务器，服务器进行判断比较</p>
-<p>这个判断方式是<code>http</code> 1.0的产物,精确到秒，若文件的更新频率在秒级以内，就会出现文件不一致</p>
-</li>
-<li><p><code>ETag If-None-Match</code></p>
-<p>为了解决上面的问题，<code>http</code> 1.1加了这组标记</p>
-<p><code>ETage:</code> 服务器根据内容生成唯一的字符串标识</p>
-<p><code>If-None-Match</code>: 发起协商，把本地的hash标识传给服务器，服务器进行判断比较</p>
-</li>
-</ul>
-</li>
-<li><p>浏览器缓存存放位置</p>
-<p>缓存的两个来源：</p>
-<ul>
-<li><code>memory cache</code>:内存中读取</li>
-<li><code>disk cache</code>: 硬盘中读取 </li>
-</ul>
-</li>
-</ul>
-<h3 id="PWA"><a href="#PWA" class="headerlink" title="PWA"></a>PWA</h3><blockquote>
-<p>PWA(渐进式Web应用)运用现代的web API以及传统的渐进式增强策略来创建跨平台Web应用程序<strong><em>需要专门学习有利于页面性能优化</em></strong></p>
+          <h1 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h1><blockquote>
+<p>文章是对 <code>浏览器</code> 相关知识做总结，未完待补充。</p>
 </blockquote>
-<ul>
-<li><p><code>App Shell</code></p>
-<blockquote>
-<p><code>App Shell</code> 架构是构建<code>Progressive Web App</code> 的一种方式，这种应用能可靠且及时的加载到您的用户屏幕上</p>
-</blockquote>
-<p>这个模型就是将资源离线缓存，可以确保重复访问都有快速响应的特性，页面可快速的渲染，网络仅仅获取数据</p>
-</li>
-<li><p><code>ServiceWork</code></p>
-<blockquote>
-<p><code>PWA</code> 的核心，缓存可以让页面尽快的加载，但是必须在有网络的情况下才行，没网络只能使用离线缓存，也就是<code>ServiceWork</code></p>
-</blockquote>
-<p><code>ServiceWorker</code> 有以下的功能和特性：</p>
-<ul>
-<li>一个独立的<code>worker</code> 线程，独立鱼当前网页进程，有自己独立的<code>worker context</code> </li>
-<li>一旦被<code>install</code> ,就永远存在，除非手动删除<code>unregister</code></li>
-<li>用到的时候可以直接唤醒，不用的时候自动睡眠</li>
-<li>可编程拦截代理请求和返回，缓存文件，缓存的文件可以被网页进程取到（包括网络离线状态）</li>
-<li>离线内容开发者可控</li>
-<li>能向客户端推送消息</li>
-<li>不能直接操作DOM</li>
-<li>必须在HTTPS环境下才能工作</li>
-<li>异步实现，内部大都是<code>Promise</code> 实现</li>
-</ul>
-<p>js 是单线程的，<code>ServiceWork</code> 独立线程意味着不会阻塞js执行；可编程拦截代理请求和返回，可自定义文件缓存策略</p>
-</li>
-</ul>
-<p>  这些特点意味着开发者有足够的权限去操作缓存，让缓存做到优雅，效率达到极致</p>
-<p>  设计缓存策略：</p>
-<ul>
-<li><p>缓存优先，先查询缓存，若存在，直接返回，不存在，请求服务，更新缓存</p>
-</li>
-<li><p>服务端有限，不查询缓存，直接请求服务端，服务端失败才会查询缓存</p>
-</li>
-<li><p>稳定优先，先查询缓存，有就读取，同时请求服务端更新资源</p>
-<p>参考文档：</p>
-</li>
-<li><p><a href="https://lavas.baidu.com/pwa/offline-and-cache-loading/service-worker/service-worker-introduction" target="_blank" rel="noopener">https://lavas.baidu.com/pwa/offline-and-cache-loading/service-worker/service-worker-introduction</a></p>
-</li>
-<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps</a></p>
-</li>
-</ul>
-<h3 id="URL-输入到渲染的过程"><a href="#URL-输入到渲染的过程" class="headerlink" title="URL 输入到渲染的过程"></a><a href="https://segmentfault.com/a/1190000006879700" target="_blank" rel="noopener">URL 输入到渲染的过程</a></h3><ul>
-<li>DNS解析</li>
-<li>TCP连接</li>
-<li>发送HTTP请求</li>
-<li>服务器处理请求并返回HTTP报文</li>
-<li>浏览器解析渲染页面</li>
-<li>连接结束</li>
-</ul>
-<h3 id="重绘和回流-重排"><a href="#重绘和回流-重排" class="headerlink" title="重绘和回流(重排)"></a>重绘和回流(重排)</h3><p>html文档和css渲染过程的图：<br>  <img src="/images/html%E5%92%8Ccss%E7%BB%98%E5%88%B6%E5%9B%BE.png" alt="html和css绘制图"></p>
-<p><strong>重绘：</strong> 对元素的外观做处理</p>
-<p><strong>回流：</strong> 页面采用流式布局来绘制，当一个节点空间属性发生变化，会影响到其他节点的空间布局，需要重新收集节点信息，在进行绘制。</p>
-<p>所以回流一定会触发重绘</p>
-<ul>
-<li><p>回流的优化</p>
-<blockquote>
-<p>对树的局部甚至全局重新生成是非常耗性能的，所以要避免频繁触发回流</p>
-</blockquote>
-<ul>
-<li>现代浏览器已经帮我们做了很多的优化，采用队列存储多次的回流操作，然后批量执行，但获取布局信息除外，因为要获取实时的数值，浏览器就必须要清空队列，立即执行回流</li>
-<li>避免连续多次修改，可以合并修改，一次修改</li>
-<li>对于大量不同得DOM修改，可以优先脱离文档流使用定位，或者<code>display：none</code> ,在文档流外修改完成后再放回文档中</li>
-<li>通过节流和防抖控制触发频率</li>
-<li>css3硬件加速，<code>transform</code>,<code>opacity</code>,<code>filters</code>,开启后，会重新渲染层</li>
-</ul>
-</li>
-<li><p>开启GPU加速的方法</p>
-<blockquote>
-<p>开启后，会将<code>dom</code> 元素提升为独立的渲染层，它的变化不会在影响文档流中的布局</p>
-</blockquote>
-<ul>
-<li>transform：translateZ(0)</li>
-<li>opacity</li>
-<li>filters</li>
-<li>Will-change</li>
-</ul>
-</li>
-</ul>
-<h3 id="Http和Https协议"><a href="#Http和Https协议" class="headerlink" title="Http和Https协议"></a><code>Http</code>和<code>Https</code>协议</h3><h4 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a><code>http</code>协议</h4><blockquote>
-<p><code>http</code> 是建立在<code>TCP</code> 上的应用层协议，曹文本传送协议</p>
-</blockquote>
-<ul>
-<li><code>http1.0</code>:客户端的每次请求都要求建立一次单独的连接，在处理完本次请求后自动释放连接</li>
-<li><code>http1.1</code>:可以在一次连接中处理多个请求，并且多个请求可以重叠进行，不需要等待一个请求结束后在发送下一个请求</li>
-<li><code>http2.0</code>:可支持多路复用，一个<code>tcp</code> 可同时传输多个<code>http</code> 请求，头部数据还做了压缩</li>
-</ul>
-<h4 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><code>TCP</code></h4><blockquote>
-<p><code>tcp</code> 是传输层协议，特点是：<strong>三次握手</strong>和<strong>四次挥手</strong></p>
-</blockquote>
-<ul>
-<li><p>三次握手建立连接：</p>
-<ul>
-<li>客户端发送位码为syn=1，随机产生数据包到服务器，服务器有SYN=1知道客户端要求建立联机(客户端：我要链接你)</li>
-<li>服务器收到请求后要确认联机信息，向A发送ack number=(客户端的seq+1)，syn=1，ack=1随机生成数据包（服务器：好的，你来链接吧）</li>
-<li>客户端收到后检查ack number是否正确，即第一次发送的seq number+1,一级位码ack是否为1，若正确则建立连接</li>
-</ul>
-</li>
-<li><p>四次挥手断开连接的过程：</p>
-<ul>
-<li>客户端发送请求给服务端，申请主动断开连接，进入等待状态，不在往服务端发送数据，但是接受数据（客户端：我要断开连接了）</li>
-<li>服务端收到后，告知客户端知道了，服务端进行等待状态，不在接收数据，但是可以继续发送数据（服务端：好，我知道了，但是要等一等）</li>
-<li>客户端收到服务端的告知后，进入下一阶段的等待（客户端：好，我等）</li>
-<li>服务端完成剩余数据的发送后，告知客户端可以断开了，服务端不接收和读取数据（服务端：你可以断开了）</li>
-<li>客户端收到后，告知服务端，已收到，然后释放链接（客户端：好的，我断开了）</li>
-<li>服务端收到后，也释放链接</li>
-</ul>
-</li>
-</ul>
-<h4 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h4><blockquote>
-<p>传输层的另外一个协议UDP被称为用户数据报协议，无连接的传输协议</p>
-</blockquote>
-<p>  <code>UDP</code> 是报文的搬运工，不需要建立完全可靠的链接，不保证数据的可靠性，因为协议控制项比较少，且报文头部简单，报文体积相对较小，速度上相比更快，实时性更高，比如电话会议，多媒体数据流才用的就是UDP。</p>
-<h4 id="https"><a href="#https" class="headerlink" title="https"></a><code>https</code></h4><blockquote>
-<p><code>http</code> 报文传输过程中是铭文的，可以通过抓包的方式看到报文内容，这就暴露一个安全问题，为了解决这个问题，就有了<code>TLS</code> ,<code>https = http+TLS</code></p>
-</blockquote>
-<p><code>TLS</code>: 安全传输层协议，用于在两个通信应用程序之间提供保密性和数据的完整性，该协议由两层组成：<code>TSL</code> 记录协议和<code>TLS</code> 握手协议</p>
-<p><code>TLS</code>利用非对称加密演算来对通信方做身份的认证，之后交换对称密钥作为会谈的密钥（<code>Sessionkey</code>),因此https分成两个阶段</p>
-<ul>
-<li>通过非对称加解密确认对方身份是否合法，若合法生成会话密钥</li>
-<li>报文的在发送前，先用会话密钥进行对称加密在传输</li>
-</ul>
-<h4 id="TLS-握手"><a href="#TLS-握手" class="headerlink" title="TLS 握手"></a><code>TLS</code> 握手</h4><p>步骤如下：</p>
-<ul>
-<li>客户端请求服务端建立<code>SSL</code> 链接，服务端并向客户端发送一个随机数<code>randomC</code> 和<code>CA</code> 机构颁发的证书</li>
-<li>客户端对证书进行验证，验证通过后，生成一个随机数<code>randomS</code>，用公钥对<code>randomS</code> 加密，同时用<code>randomS</code> 生成一段签名，发送给服务端</li>
-<li>服务端接收到后，用私钥对密文解密，用解密后的key生成签名，并对客户端传来的签名进行比较，检验通过后，然后生成一个随机数<code>randomP</code> ,并对私钥加密，还有随机数生成的hash值，一并发送给客户端</li>
-<li>客户端用公钥解密，并验证 hash通过后，两端利用 <code>randomC</code> <code>randomS</code> <code>ramdomP</code> 通过一定的算法生成<code>session key</code> ，后续的报文将通过<code>session key</code> 对称加密进行传输</li>
-</ul>
-<p>图：<br><img src="/images/TSL%E6%8F%A1%E6%89%8B%E4%BC%A0%E8%BE%93.png" alt="TSL握手传输"></p>
-<h4 id="什么情况下会触发options请求"><a href="#什么情况下会触发options请求" class="headerlink" title="什么情况下会触发options请求"></a>什么情况下会触发options请求</h4><blockquote>
-<p><code>options</code> 通常用于，在跨域请求前发起的预检请求，已检验请求是否被服务器接受</p>
-</blockquote>
-<h4 id="http常见的请求头"><a href="#http常见的请求头" class="headerlink" title="http常见的请求头"></a>http常见的请求头</h4><p>请求头：<br><img src="/images/%E8%AF%B7%E6%B1%82%E5%A4%B4.png" alt="请求头"><br>响应头：<br><img src="/images/%E5%93%8D%E5%BA%94%E5%A4%B4.png" alt="响应头"></p>
-<ul>
-<li><p>报文提交<code>Content-Type</code> 的几种区别：</p>
-<ul>
-<li><p><code>application/json</code>: json字符串</p>
-</li>
-<li><p><code>application/x-www-form-urlencoded</code>: &amp;将<code>key=value</code> 进行拼接</p>
-</li>
-<li><p><code>multipart/form-data</code>：jquery默认使用，常用于文件上传</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="前端安全规范"><a href="#前端安全规范" class="headerlink" title="前端安全规范"></a>前端安全规范</h3><blockquote>
-<p>前端安全主要分为<code>XSS</code>和<code>CSRF</code></p>
-</blockquote>
-<h4 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a><code>XSS</code></h4><blockquote>
-<p>跨站脚本攻击，攻击者将一段可执行的代码注入到网页中，如链接，输入框，分为持久性和临时性的，持久性的是恶意代码被存储到数据库中，会造成持久的攻击；临时性的是仅在当前被工具页面上生效</p>
-</blockquote>
-<p><strong>防范方式</strong>：对与网页上获取的内容要做转义处理</p>
-<h4 id="CSRF"><a href="#CSRF" class="headerlink" title="CSRF"></a><code>CSRF</code></h4><blockquote>
-<p>跨站请求伪造，构造一个钓鱼网站，利用站点对浏览器的信任，从而欺骗用户，发起恶意操作</p>
-</blockquote>
-<p>用户在浏览器登录后，站点是信任浏览器的，但浏览器是没法知道请求是否是用户自愿发起的，站点信任后，所发起的请求浏览器都是信任的。</p>
-<p>那么用户在已登录的情况下，钓鱼站点中发起跨域请求，跨域标签或者form表单，就会把用户的认证信息cookies带上，从而达到伪造用户身份进行攻击</p>
-<p><strong>防范方式</strong>：</p>
-<ul>
-<li>服务端校验Referer，但某些浏览器可能可以修改Referer</li>
-<li>随机token，每访问页面就生成一个token，页面中的请求把这个token带上，服务端对token进行校验，注意这个token不能存储在cookie中</li>
-</ul>
-<h3 id="跨域解决方案"><a href="#跨域解决方案" class="headerlink" title="跨域解决方案"></a>跨域解决方案</h3>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/03/02/前端-浏览器/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -719,46 +502,16 @@
 
       
         
-          
-            <h2 id="webpack-基础配置"><a href="#webpack-基础配置" class="headerlink" title="webpack 基础配置"></a>webpack 基础配置</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
-<li>项目结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">├── dist                      打包输出目录，只需部署这个目录到生产环境</span><br><span class="line">├── package.json              项目配置信息</span><br><span class="line">├── node_modules              npm 安装的依赖包都在这里面</span><br><span class="line">├── src                       我们的源代码</span><br><span class="line">│   ├── components            可以复用的模块放在这里面</span><br><span class="line">│   ├── index.html            入口 html</span><br><span class="line">│   ├── index.js              入口 js</span><br><span class="line">│   ├── shared                公共函数库</span><br><span class="line">│   └── views                 页面放这里</span><br><span class="line">└── webpack.config.js         webpack 配置文件</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>初始化项目</li>
-</ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>添加eslint代码检查工具</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install eslint eslint-config-enough babel-eslint eslint-loader --save-dev</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>配置eslint(需要在package.json添加内容)</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"eslintConfig"</span>:&#123;</span><br><span class="line">        <span class="attr">"extends"</span>:<span class="string">"enough"</span>,</span><br><span class="line">        <span class="attr">"env"</span>:&#123;</span><br><span class="line">            <span class="attr">"browser"</span>:<span class="literal">true</span>,</span><br><span class="line">            <span class="attr">"node"</span>:<span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="安装webpack和babel"><a href="#安装webpack和babel" class="headerlink" title="安装webpack和babel"></a>安装webpack和babel</h3><ul>
-<li>webpack</li>
-<li>webpack-cli</li>
-<li>weback-serve</li>
-<li>html-webpack-plugin</li>
-<li>html-loader</li>
-<li>css-loader</li>
-<li>style-loader</li>
-<li>file-loader</li>
-<li>url-loader</li>
-</ul>
-<ul>
-<li>babel-core</li>
-<li>babel-preset-env</li>
-<li>babel-loader</li>
-</ul>
-<h3 id="进阶配置"><a href="#进阶配置" class="headerlink" title="进阶配置"></a>进阶配置</h3>
-          
+          <h2 id="webpack-基础配置"><a href="#webpack-基础配置" class="headerlink" title="webpack 基础配置"></a>webpack 基础配置</h2><blockquote>
+<p>webpack配置</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/01/19/webpack核心内容/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -897,16 +650,16 @@
 
       
         
-          
-            <h2 id="JavaScript继承"><a href="#JavaScript继承" class="headerlink" title="JavaScript继承"></a>JavaScript继承</h2><h3 id="父类"><a href="#父类" class="headerlink" title="父类"></a>父类</h3><blockquote>
-<p>想要继承必须提供父类(继承谁,提供继承的属性)</p>
+          <h2 id="JavaScript继承"><a href="#JavaScript继承" class="headerlink" title="JavaScript继承"></a>JavaScript继承</h2><blockquote>
+<p>JavaScript 的继承的几种方法</p>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>)</span>&#123; <span class="comment">//构造函数添加参数</span></span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.sum = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype.age = <span class="number">10</span> <span class="comment">//给构造函数添加原型属性</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="继承的方法-六种"><a href="#继承的方法-六种" class="headerlink" title="继承的方法(六种)"></a>继承的方法(六种)</h3><h4 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Per</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">"key"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/10/JavaScript继承/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1186,238 +939,16 @@
 
       
         
-          
-            <h1 id="React"><a href="#React" class="headerlink" title="React"></a>React</h1><h3 id="元素渲染"><a href="#元素渲染" class="headerlink" title="元素渲染"></a>元素渲染</h3><blockquote>
-<p>元素是构成React应用的最小砖块, 与浏览器DOM元素不同,React 元素是创建开销极小的普通对象.React DOM 会负责更新DOM来与React 元素保持一致</p>
+          <h1 id="React"><a href="#React" class="headerlink" title="React"></a>React</h1><blockquote>
+<p>React 基础使用</p>
 </blockquote>
-<h4 id="将一个元素渲染成为DOM"><a href="#将一个元素渲染成为DOM" class="headerlink" title="将一个元素渲染成为DOM"></a>将一个元素渲染成为DOM</h4><ul>
-<li><p>仅使用 React 应用通常只有单一的根DOM 节点, 这个根节点内的内容都将有ReactDOM 管理</p>
-</li>
-<li><p>想要将React 元素渲染到根DOM节点中,可以使用<code>React.render()</code></p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> element = <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello, world<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">ReactDOM.render(element, <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>));</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="更新已渲染的元素"><a href="#更新已渲染的元素" class="headerlink" title="更新已渲染的元素"></a>更新已渲染的元素</h4><blockquote>
-<p><strong>React 元素是<em>不可变对象</em> 一旦创建,就无法更改子元素或属性.</strong></p>
-</blockquote>
-<ul>
-<li><p>想要更改UI的唯一方式就是创建一个全新的元素,并且将其传入<code>ReactDOM.render()</code> 中</p>
-<p>例子:定时器</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tick</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">const</span> element = (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">        	&lt;h1&gt;Hello,world!&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">            &lt;h2&gt;It is &#123;new Data().tolocaleTimeString()&#125;&lt;/</span>h2&gt;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">    ReactDOM.render(element,document.getELementById('root'));</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">setInterval(tick,1000);</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p><strong>注意:</strong> 大多数的<code>React</code>应用只调用依次<code>ReactDOM.render()</code></p>
-<h4 id="React-只更新它需要更新的部分"><a href="#React-只更新它需要更新的部分" class="headerlink" title="React 只更新它需要更新的部分"></a>React 只更新它需要更新的部分</h4><h3 id="组件-amp-Props"><a href="#组件-amp-Props" class="headerlink" title="组件&amp;Props"></a>组件&amp;Props</h3><blockquote>
-<p>组件允许你将UI拆分为独立可复用的代码片段,并对每个片段进行独立的构思.</p>
-</blockquote>
-<p>定义组件:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES6 class</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">welcome</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">	render()&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello,&#123;this.props.name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//ES5 函数形式</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">welcome</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span> Hello,&#123;props,name&#125; <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="渲染组件"><a href="#渲染组件" class="headerlink" title="渲染组件"></a>渲染组件</h4><blockquote>
-<p>React 元素不仅可以是DOM标签,也可以自定义组件</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Welcome</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">    render()&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello,&#123;this.props.name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> element = <span class="xml"><span class="tag">&lt;<span class="name">Welcome</span> <span class="attr">name</span>=<span class="string">"Sara"</span> /&gt;</span></span>;</span><br><span class="line">ReactDOM.render(</span><br><span class="line">	element,</span><br><span class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>);</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>这个例子发生的过程:</p>
-<ul>
-<li>调用 <code>ReactDOM.render()</code> 函数,并传入<code>&lt;Welcome name=&quot;Sear&quot; /&gt;</code> 作为参数</li>
-<li>React 调用<code>Welcome</code> 组件,并传入<code>{name:&quot;Sear&quot;}</code> 作为props传入</li>
-<li><code>Welcome</code> 组件将<code>&lt;h1&gt;Hello,Sara&lt;/h1&gt;</code> 元素作为返回值</li>
-<li><code>React DOM</code> 将DOM 高效的跟新为<code>&lt;h1&gt;Hello, Sara&lt;/h1&gt;</code></li>
-</ul>
-<p><strong>注意:</strong> <em>组件名称必须以大写字母开头,<code>React</code>会将小写字母开头的组件视为原生DOM标签</em></p>
-<h4 id="组合组件"><a href="#组合组件" class="headerlink" title="组合组件"></a>组合组件</h4><blockquote>
-<p>组件可以在其输出中引用其他组件,这就表明我们可以创建一个多次渲染的组件</p>
-</blockquote>
-<h4 id="拆分组件"><a href="#拆分组件" class="headerlink" title="拆分组件"></a>拆分组件</h4><p>将组件拆分为更小的组件</p>
-<h4 id="Props-的只读性"><a href="#Props-的只读性" class="headerlink" title="Props 的只读性"></a>Props 的只读性</h4><p><strong>注意:</strong> <em>所有React 组件都必须像纯函数一样保护他们的Props不被改变</em></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">withDraw</span>(<span class="params">account,amount</span>)</span>&#123;</span><br><span class="line">	account.total -= amout</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这个就不是一个纯函数,更改了自己的入参</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="State-amp-amp-生命周期"><a href="#State-amp-amp-生命周期" class="headerlink" title="State&amp;&amp; 生命周期"></a>State&amp;&amp; 生命周期</h3><p>封装<code>clock</code> 组件:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Clock</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">        	&lt;H1&gt;Hello,world&lt;<span class="regexp">/H1&gt;</span></span><br><span class="line"><span class="regexp">            &lt;h2&gt;It is &#123;prps.data.toLocaleTimeString()&#125;&lt;/</span>h2&gt;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">function tick()&#123;</span></span><br><span class="line"><span class="regexp">    ReactDOM.render(</span></span><br><span class="line"><span class="regexp">    	&lt;Clock data=&#123;new Date()&#125; /</span>&gt;,</span><br><span class="line">        <span class="built_in">document</span>.getElement(<span class="string">'root'</span>)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setInterval(tick,<span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这个忽略一个关键的技术细节: <code>Clock</code>组件需要设置一个计时器,并且需要每秒更新ui</p>
-<p>理想情况下,我们希望只需要写一次代码,便可以让Clock 组件更新:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">	&lt;Clock /&gt;,</span><br><span class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>State与props 类似,但是state是私有的,并且完全受控于当前组件</p>
-</blockquote>
-<h4 id="将函数组件转换成class组件"><a href="#将函数组件转换成class组件" class="headerlink" title="将函数组件转换成class组件"></a>将函数组件转换成class组件</h4><ul>
-<li><p>通过以下的五步将<code>Clock</code> 的函数组件转换成class组件</p>
-<ul>
-<li>创建一个同名的 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener">ES6 class</a>，并且继承于 <code>React.Component</code>。</li>
-<li>添加一个空的 <code>render()</code> 方法。</li>
-<li>将函数体移动到 <code>render()</code> 方法之中。</li>
-<li>在 <code>render()</code> 方法中使用 <code>this.props</code> 替换 <code>props</code>。</li>
-<li>删除剩余的空函数声明</li>
-</ul>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">	render()&#123;</span><br><span class="line">		<span class="keyword">return</span>(</span><br><span class="line">        	&lt;div&gt;</span><br><span class="line">            	&lt;h1&gt;Hello,World!&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">                &lt;h2&gt;It is &#123;this.props.date.toLocaleTimeString()&#125;&lt;/</span>h2&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="向class组件中添加局部的state"><a href="#向class组件中添加局部的state" class="headerlink" title="向class组件中添加局部的state"></a>向class组件中添加局部的state</h4><p>通过以下3步将<code>data</code> 从<code>props</code> 移动到<code>state</code> 中:</p>
-<ul>
-<li><p>把<code>render()</code> 方法中的<code>this.props.date</code> 替换成<code>this.state.date</code></p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span> <span class="title">extend</span> <span class="title">React</span>.<span class="title">component</span></span>&#123;</span><br><span class="line">	render()&#123;</span><br><span class="line">		renturn(</span><br><span class="line">        	&lt;div&gt;</span><br><span class="line">            	&lt;h1&gt;Hello,World&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">                &lt;h2&gt;It is &#123;this.state.date.toLocaleTimeString()&#125;.&lt;/</span>h2&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加一个class构造函数,在该函数中为this.state赋初值</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span> <span class="title">extend</span> <span class="title">React</span>.<span class="title">component</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;<span class="attr">date</span>:<span class="keyword">new</span> <span class="built_in">Date</span>()&#125;</span><br><span class="line">    &#125;</span><br><span class="line">	render()&#123;</span><br><span class="line">		renturn(</span><br><span class="line">        	&lt;div&gt;</span><br><span class="line">            	&lt;h1&gt;Hello,World&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">                &lt;h2&gt;It is &#123;this.state.date.toLocaleTimeString()&#125;.&lt;/</span>h2&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>通过以下的方式将<code>props</code> 传递给父类的构造函数中</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;<span class="attr">date</span>:<span class="keyword">new</span> <span class="built_in">Date</span>()&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>移除<code>&lt;Clock /&gt;</code> 元素中的<code>date</code>属性:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">	&lt;Clock /&gt;,</span><br><span class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="将生命周期方法添加到Class中"><a href="#将生命周期方法添加到Class中" class="headerlink" title="将生命周期方法添加到Class中"></a>将生命周期方法添加到Class中</h4><blockquote>
-<p>在许多组将应用程序中,当组件被销毁时释放所占用的资源是非常重要的</p>
-</blockquote>
-<p>生命周期方法:</p>
-<ul>
-<li><code>compomentDidMount()</code> 方法会在组将已经被渲染到DOM中后运行</li>
-<li><code>componentWillUnmount()</code> </li>
-<li><code>this.setState()</code> 来更新组件state:</li>
-</ul>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">		<span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.state = &#123;<span class="attr">date</span>:<span class="keyword">new</span> <span class="built_in">Date</span>()&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    componentDidMount()&#123;</span><br><span class="line">		<span class="keyword">this</span>.timeID = setInterval(</span><br><span class="line">        	() =&gt;<span class="keyword">this</span>.tick(),</span><br><span class="line">            <span class="number">1000</span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    componentWillUnmount()&#123;</span><br><span class="line">		clearInterval(<span class="keyword">this</span>.timeID)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    tick()&#123;</span><br><span class="line">		<span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            date:<span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">  </span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h1&gt;Hello, world!&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">        &lt;h2&gt;It is &#123;this.state.date.toLocaleTimeString()&#125;.&lt;/</span>h2&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Clock /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>当 <code>&lt;Clock /&gt;</code> 被传给 <code>ReactDOM.render()</code>的时候，React 会调用 <code>Clock</code> 组件的构造函数。 因为 <code>Clock</code> 需要显示当前的时间，所以它会用一个包含当前时间的对象来初始化 <code>this.state</code>。我们会在之后更新 state。</li>
-<li>之后 React 会调用组件的 <code>render()</code> 方法。这就是　React 确定该在页面上展示什么的方式。然后　React 更新 DOM 来匹配 <code>Clock</code> 渲染的输出。</li>
-<li>当 <code>Clock</code> 的输出被插入到 DOM 中后， React 就会调用 <code>ComponentDidMount()</code> 生命周期方法。在这个方法中，<code>Clock</code> 组件向浏览器请求设置一个计时器来每秒调用一次组件的 <code>tick()</code>方法。</li>
-<li>浏览器每秒都会调用一次 <code>tick()</code> 方法。 在这方法之中，<code>Clock</code> 组件会通过调用 <code>setState()</code>来计划进行一次 UI 更新。得益于 <code>setState()</code> 的调用，React 能够知道 state 已经改变了，然后会重新调用 <code>render()</code> 方法来确定页面上该显示什么。这一次，<code>render()</code> 方法中的 <code>this.state.date</code> 就不一样了，如此以来就会渲染输出更新过的时间。React 也会相应的更新 DOM。</li>
-<li>一旦 <code>Clock</code> 组件从 DOM 中被移除，React 就会调用 <code>componentWillUnmount()</code> 生命周期方法，这样计时器就停止了。</li>
-</ol>
-<h4 id="正确使用State"><a href="#正确使用State" class="headerlink" title="正确使用State"></a>正确使用State</h4><p>关于<code>setState()</code> 的三件事:</p>
-<ul>
-<li><p>不要直接修改State</p>
-<blockquote>
-<p>更改State,应该使用<code>setState()</code> . 构造函数是唯一可以给<code>this.state</code> 赋值的地方.</p>
-</blockquote>
-</li>
-<li><p>State额更新可能是异步的</p>
-<blockquote>
-<p>出于性能考虑,React 可能会把多个<code>setState()</code> 调用合并成一个调用.</p>
-<p>因为<code>this.props</code> 和<code>this.state</code> 可能异步更新,所有不能依赖他们的值来更新下一个状态</p>
-</blockquote>
-<p>例:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//wrong</span></span><br><span class="line"><span class="keyword">this</span>.setState(&#123;</span><br><span class="line">	  counter: <span class="keyword">this</span>.state.counter + <span class="keyword">this</span>.props.increment,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>解决这个问题,可以让<code>setState()</code> 接收一个函数而不是一个对象.</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.setState(<span class="function">(<span class="params">state,props</span>) =&gt;</span>&#123;</span><br><span class="line">    counter:state.counter + props.incresment</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>State的更新会被合并</p>
-<blockquote>
-<p>当调用<code>setState()</code> 的时候,React 会把你提供的对象合并到当前的state</p>
-</blockquote>
-<p>例:</p>
- <figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">  <span class="keyword">super</span>(props);</span><br><span class="line">  <span class="keyword">this</span>.state = &#123;</span><br><span class="line">    posts: [],</span><br><span class="line">    comments: []</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>分别调用<code>setState()</code> 来单独更新他们</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount() &#123;</span><br><span class="line">  fetchPosts().then(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      posts: response.posts</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  fetchComments().then(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      comments: response.comments</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里的合并是浅合并，所以 <code>this.setState({comments})</code> 完整保留了 <code>this.state.posts</code>， 但是完全替换了 <code>this.state.comments</code>。</p>
-</li>
-</ul>
-<h4 id="数据是向下流动的"><a href="#数据是向下流动的" class="headerlink" title="数据是向下流动的"></a>数据是向下流动的</h4><p>​    组件可以选择把它的 state 作为 props 向下传递到它的子组件中：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2&gt;It is &#123;<span class="keyword">this</span>.state.date.toLocaleTimeString()&#125;&lt;<span class="regexp">/h2&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>对于自定义组件同样适用:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;FormattedDate date=&#123;<span class="keyword">this</span>.state.date&#125; /&gt;</span><br></pre></td></tr></table></figure>
-
-<p><code>FormattedDate</code> 组件会在其 props 中接收参数 <code>date</code>，但是组件本身无法知道它是来自于 <code>Clock</code> 的 state，或是 <code>Clock</code> 的 props，还是手动输入的：</p>
-<h3 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h3><ul>
-<li><p>React 元素的事件处理和DOM 元素的很相似,但是有一点语法上的不同:</p>
-<ul>
-<li>React 事件的命名采用小驼峰,而不是纯小写的</li>
-<li>使用JSX语法是需要传入一个函数作为事件处理函数,而不是一个字符串</li>
-</ul>
-<p>传统的HTML:</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">"activateLasers()"</span>&gt;</span></span><br><span class="line">  Activate Lasers</span><br><span class="line"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>在React中略微不同:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;button onClick=&#123;activateLasers&#125;&gt;</span><br><span class="line">  Activate Lasers</span><br><span class="line">&lt;<span class="regexp">/button&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在Reac 不能通过直接返回<code>false</code> 的方式来阻止默认行为,必须要使用显示的<code>preventDefault</code> </p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//阻止默认打开一个新的页面</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ActionLink</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">handleClick</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">		e.preventDefault();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">    &lt;a href=<span class="string">'#'</span> onClick = &#123;handleClick&#125;&gt;&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>ES6 class 语法定义一个组件的时候,通常的做法是将事件处理函数声明为class中的方法</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Toggle</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;<span class="attr">isToggleOn</span>: <span class="literal">true</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为了在回调中使用 `this`，这个绑定是必不可少的</span></span><br><span class="line">    <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleClick() &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(<span class="function"><span class="params">state</span> =&gt;</span> (&#123;</span><br><span class="line">      isToggleOn: !state.isToggleOn</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;button onClick=&#123;<span class="keyword">this</span>.handleClick&#125;&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.state.isToggleOn ? <span class="string">'ON'</span> : <span class="string">'OFF'</span>&#125;</span><br><span class="line">      &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Toggle /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>jsx回调函数中的this, 在javaScript中,class 的方法默认不会绑定<code>this</code> ,如果没有绑定<code>this</code>,调用这个函数的时候<code>this</code>的值为<code>undefined</code></p>
-<p>如果不想使用<code>bind</code>方法:</p>
-<ul>
-<li><p>使用<code>public class fields语法</code></p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoggingButton</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 此语法确保 `handleClick` 内的 `this` 已被绑定。</span></span><br><span class="line">  <span class="comment">// 注意: 这是 *实验性* 语法。</span></span><br><span class="line">  handleClick = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'this is:'</span>, <span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;button onClick=&#123;<span class="keyword">this</span>.handleClick&#125;&gt;</span><br><span class="line">        Click me</span><br><span class="line">      &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>还可以使用箭头函数:</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">lass LoggingButton extends React.Component &#123;</span><br><span class="line">  handleClick() &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'this is:'</span>, <span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="comment">// 此语法确保 `handleClick` 内的 `this` 已被绑定。</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;button onClick=&#123;(e) =&gt; <span class="keyword">this</span>.handleClick(e)&#125;&gt;</span><br><span class="line">        Click me</span><br><span class="line">      &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="向事件处理程序传递参数"><a href="#向事件处理程序传递参数" class="headerlink" title="向事件处理程序传递参数"></a>向事件处理程序传递参数</h4><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;button onClick=&#123;(e) =&gt; <span class="keyword">this</span>.deleteRow(id, e)&#125;&gt;Delete Row&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">&lt;button onClick=&#123;this.deleteRow.bind(this, id)&#125;&gt;Delete Row&lt;/</span>button&gt;</span><br></pre></td></tr></table></figure>
-
-<p>React 的事件对象 <code>e</code> 会被作为第二个参数传递。如果通过箭头函数的方式，事件对象必须显式的进行传递，而通过 <code>bind</code> 的方式，事件对象以及更多的参数将会被隐式的进行传递。</p>
-<h3 id="条件渲染"><a href="#条件渲染" class="headerlink" title="条件渲染"></a>条件渲染</h3><blockquote>
-<p>在 React 中，你可以创建不同的组件来封装各种你需要的行为。然后，依据应用的不同状态，你可以只渲染对应状态下的部分内容。</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">UserGreeting</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Welcome back!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GuestGreeting</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Please singin up<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Greeting 组件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Greeting</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> isLoggedIn = props.isLoggedIn;</span><br><span class="line">  <span class="keyword">if</span> (isLoggedIn) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">UserGreeting</span> /&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">GuestGreeting</span> /&gt;</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  <span class="comment">// Try changing to isLoggedIn=&#123;true&#125;:</span></span><br><span class="line">  &lt;Greeting isLoggedIn=&#123;<span class="literal">false</span>&#125; /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="元素变量"><a href="#元素变量" class="headerlink" title="元素变量"></a>元素变量</h4><blockquote>
-<p>可以使用变量来存储元素,有条件的渲染组件的一部分,其他渲染部分不会改变</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">LoginButton</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;button onClick=&#123;props.onClick&#125;&gt;</span><br><span class="line">      Login</span><br><span class="line">    &lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">function LogoutButton(props) &#123;</span></span><br><span class="line"><span class="regexp">  return (</span></span><br><span class="line"><span class="regexp">    &lt;button onClick=&#123;props.onClick&#125;&gt;</span></span><br><span class="line"><span class="regexp">      Logout</span></span><br><span class="line"><span class="regexp">    &lt;/</span>button&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginControl</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.handleLoginClick = <span class="keyword">this</span>.handleLoginClick.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.handleLogoutClick = <span class="keyword">this</span>.handleLogoutClick.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;<span class="attr">isLoggedIn</span>: <span class="literal">false</span>&#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleLoginClick() &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">isLoggedIn</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleLogoutClick() &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">isLoggedIn</span>: <span class="literal">false</span>&#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> isLoggedIn = <span class="keyword">this</span>.state.isLoggedIn;</span><br><span class="line">    <span class="keyword">let</span> button;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (isLoggedIn) &#123;</span><br><span class="line">      button = <span class="xml"><span class="tag">&lt;<span class="name">LogoutButton</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleLogoutClick&#125;</span> /&gt;</span></span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      button = <span class="xml"><span class="tag">&lt;<span class="name">LoginButton</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleLoginClick&#125;</span> /&gt;</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Greeting isLoggedIn=&#123;isLoggedIn&#125; /&gt;</span><br><span class="line">        &#123;button&#125;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;LoginControl /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="与运算符"><a href="#与运算符" class="headerlink" title="与运算符"></a>与运算符</h4><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Mailbox</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> unreadMessages = props.unreadMessages;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Hello!&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">      &#123;unreadMessages.length &gt; 0 &amp;&amp;</span></span><br><span class="line"><span class="regexp">        &lt;h2&gt;</span></span><br><span class="line"><span class="regexp">          You have &#123;unreadMessages.length&#125; unread messages.</span></span><br><span class="line"><span class="regexp">        &lt;/</span>h2&gt;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const messages = ['React', 'Re: React', 'Re:Re: React'];</span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;Mailbox unreadMessages=&#123;messages&#125; /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>在javaScript中,<code>true&amp;&amp; expression</code> 会返回<code>expression</code>,而<code>false &amp;&amp;expression</code> 会返回<code>false</code>.因此,如果条件是<code>true</code>,&amp;&amp; 右侧的元素会被渲染</p>
-<h4 id="三目运算符"><a href="#三目运算符" class="headerlink" title="三目运算符"></a>三目运算符</h4><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">  <span class="keyword">const</span> isLoggedIn = <span class="keyword">this</span>.state.isLoggedIn;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;isLoggedIn ? (</span><br><span class="line">        &lt;LogoutButton onClick=&#123;<span class="keyword">this</span>.handleLogoutClick&#125; /&gt;</span><br><span class="line">      ) : (</span><br><span class="line">        &lt;LoginButton onClick=&#123;<span class="keyword">this</span>.handleLoginClick&#125; /&gt;</span><br><span class="line">      )&#125;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="阻止组件渲染"><a href="#阻止组件渲染" class="headerlink" title="阻止组件渲染"></a>阻止组件渲染</h4><p>在某种情况下,可能希望隐藏组件,可以让<code>rander</code> 方法放回<code>null</code></p>
-<h3 id="列表-amp-key"><a href="#列表-amp-key" class="headerlink" title="列表&amp; key"></a>列表&amp; key</h3><h4 id="渲染多个组件"><a href="#渲染多个组件" class="headerlink" title="渲染多个组件"></a>渲染多个组件</h4><p>使用<code>{}</code> 在JSX内构建一个元素集合</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> listItems = numbers.map(<span class="function">(<span class="params">number</span>) =&gt;</span></span><br><span class="line">                             	&lt;li&gt;&#123;number&#125;&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">                             )</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;ul&gt;&#123;listItems&#125;&lt;<span class="regexp">/ul&gt;,</span></span><br><span class="line"><span class="regexp">  document.getElementById('root')</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="基础列表组件"><a href="#基础列表组件" class="headerlink" title="基础列表组件"></a>基础列表组件</h4><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NumberList</span>(<span class="params">props</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">const</span> numbers = props.numbers;</span><br><span class="line">    <span class="keyword">const</span> listItems = number.map(<span class="function">(<span class="params">number</span>) =&gt;</span></span><br><span class="line">                                &lt;li  key=&#123;number.toString()&gt;&#123;number&#125;&lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">                                );</span></span><br><span class="line"><span class="regexp">      return (&lt;ul&gt;&#123;listItems&#125;&lt;/u</span>l&gt; )</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;NumberList numbers=&#123;numbers&#125; /&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="key"><a href="#key" class="headerlink" title="key"></a>key</h4><blockquote>
-<p>key帮助React 识别哪些元素改变了,比如被添加或者删除</p>
-</blockquote>
-<p><strong>注意:</strong> 一个元素的key最好是这个元素在列表中拥有的一个独一无二的字符串.通常使用来自数据的Id来作为元素的key.<strong><em>当元素没有确定的id的时候,万不得已可以使用元素索引index作为key</em></strong></p>
-<p>如果列表项目的顺序可能会变化的时候,不建议使用索引来做key值,这样会导致性能的变差</p>
-<h4 id="用key-提取组件"><a href="#用key-提取组件" class="headerlink" title="用key 提取组件"></a>用key 提取组件</h4><blockquote>
-<p>元素key只有放在就近的数组上下文中才有意义</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ListItem</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> value = props.value;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="comment">// 错误！你不需要在这里指定 key：</span></span><br><span class="line">    &lt;li key=&#123;value.toString()&#125;&gt;</span><br><span class="line">      &#123;value&#125;</span><br><span class="line">    &lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">function NumberList(props) &#123;</span></span><br><span class="line"><span class="regexp">  const numbers = props.numbers;</span></span><br><span class="line"><span class="regexp">  const listItems = numbers.map((number) =&gt;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 错误！元素的 key 应该在这里指定：</span></span><br><span class="line"><span class="regexp">    &lt;ListItem value=&#123;number&#125; /</span>&gt;</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">      &#123;listItems&#125;</span><br><span class="line">    &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const numbers = [1, 2, 3, 4, 5];</span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">  &lt;NumberList numbers=&#123;numbers&#125; /</span>&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'root'</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="key-只是在兄弟节点之间必须唯一"><a href="#key-只是在兄弟节点之间必须唯一" class="headerlink" title="key 只是在兄弟节点之间必须唯一"></a>key 只是在兄弟节点之间必须唯一</h4><blockquote>
-<p>数组元素中使用的key在其兄弟节点之间应该是独一无二的.当生成两个不同的数组时,可以使用相同的key值;</p>
-</blockquote>
-<ul>
-<li>key 会传递给 React ,但是不会传递给你的组件.故: Post组件可以读出<code>props.id</code> ,但是不能读出<code>props.key</code></li>
-</ul>
-<h4 id="在-JSX-中嵌入-map"><a href="#在-JSX-中嵌入-map" class="headerlink" title="在 JSX 中嵌入 map()"></a>在 JSX 中嵌入 map()</h4><p>JSX 允许在大括号中嵌入任何表达式,所有我们可以内联<code>map()</code> 返回的结果</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NumberList</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> numbers = props.numbers;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">      &#123;numbers.map(<span class="function">(<span class="params">number</span>) =&gt;</span></span><br><span class="line">        &lt;ListItem key=&#123;number.toString()&#125;</span><br><span class="line">                  value=&#123;number&#125; /&gt;</span><br><span class="line"></span><br><span class="line">      )&#125;</span><br><span class="line">    &lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/06/react基础学习/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1556,287 +1087,16 @@
 
       
         
-          
-            <h2 id="Set和Map-数据结构"><a href="#Set和Map-数据结构" class="headerlink" title="Set和Map 数据结构"></a>Set和Map 数据结构</h2><h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><blockquote>
-<p>ES6 新提供的数据结构,类似于数组,但是成员的值唯一</p>
+          <blockquote>
+<p>ES6 理解</p>
 </blockquote>
-<ul>
-<li><p><code>set</code> 本身是构造函数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> <span class="built_in">Set</span>();</span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>].forEach(<span class="function"><span class="params">x</span> =&gt;</span>a.add(x));</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">of</span> a)&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(i)</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//1,2,3,4,5,6</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>使用add方法,可以向Set结构加入成员</strong></p>
-</li>
-<li><p><code>Set</code> 函数可以接受具有Iterator 接口的其他数据作为参数,用来初始化</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例一</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">set</span> = new Set([1,2,3,4,4]);</span><br><span class="line">[...<span class="keyword">set</span>]</span><br><span class="line">//[1,2,3,4]</span><br><span class="line"></span><br><span class="line">//例二</span><br><span class="line">const items = new Set([1,2,3,4,5,5,5,5]);</span><br><span class="line">item.size //5</span><br><span class="line"></span><br><span class="line">//例三</span><br><span class="line">const <span class="keyword">set</span> = new Set(document.querySelectorAll('div'));</span><br><span class="line"><span class="keyword">set</span>.size //56</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>上面的前两个例子接受数组作为参数,最后一个为类似于数组的对象作为参数</p>
-</li>
-<li><p>新的数组去重方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">set</span> = new Set([1,2,3,4,4]);</span><br><span class="line">[...<span class="keyword">set</span>]</span><br><span class="line">//[1,2,3,4]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>去除字符串的重复字符</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[...new <span class="built_in">Set</span>(<span class="string">'abbbc'</span>)].join(<span class="string">''</span>) <span class="comment">//"abc"</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>向Set加入值时,不会发生类型的转变</p>
-<ul>
-<li><p>两个对象总是不相等的</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">set</span> = new Set();</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>.add(&#123;&#125;);</span><br><span class="line"><span class="keyword">set</span>.size //1</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>.add(&#123;&#125;);</span><br><span class="line"><span class="keyword">set</span>.size //2</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="Set-实例属性和方法"><a href="#Set-实例属性和方法" class="headerlink" title="Set 实例属性和方法"></a>Set 实例属性和方法</h4><ul>
-<li><p>Set 实例属性</p>
-<ul>
-<li>Set.prototype.constructor: 构造函数,默认就是<code>Set</code>函数</li>
-<li>Set.prototype.size: 返回Set实例的成员总数</li>
-</ul>
-</li>
-<li><p>Set 实例方法分为2类: 操作方法和遍历方法</p>
-<ul>
-<li><p>操作方法</p>
-<ul>
-<li>Set.prototype.add(value) 返回set结构本身</li>
-<li>Set.prototype.delete(value) 返回一个布尔值,表示是否删除成功</li>
-<li>Set.prototype.has(value) 返回一个布尔值,表示该值是否是Set成员</li>
-<li>Ser.prototype.clear( )</li>
-</ul>
-</li>
-<li><p>遍历方法</p>
-<ul>
-<li><code>Set.prototype.keys()</code>：返回键名的遍历器</li>
-<li><code>Set.prototype.values()</code>：返回键值的遍历器</li>
-<li><code>Set.prototype.entries()</code>：返回键值对的遍历器</li>
-<li><code>Set.prototype.forEach()</code>：使用回调函数遍历每个成员</li>
-</ul>
-</li>
-<li><p>遍历的应用</p>
-<ul>
-<li><p>扩展运算符(…) 内部使用<code>for...of</code> 循环,也可以用于<code>Set</code>结构</p>
-</li>
-<li><p>数组去重</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">3</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">5</span>]</span><br><span class="line"><span class="keyword">let</span> a = [...new <span class="built_in">Set</span>(arr)]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>数组的<code>map</code>和<code>filter</code> 间接地用于<code>Set</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">set</span> = new Set([1, 2, 3]);</span><br><span class="line"><span class="keyword">set</span> = new Set([...<span class="keyword">set</span>].map(x =&gt; x * 2));</span><br><span class="line">// 返回Set结构：&#123;<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">set</span> = new Set([1, 2, 3, 4, 5]);</span><br><span class="line"><span class="keyword">set</span> = new Set([...<span class="keyword">set</span>].filter(x =&gt; (x % 2) == 0));</span><br><span class="line">// 返回Set结构：&#123;<span class="number">2</span>, <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>Set</code>实现并集(Union),交集(Intersect)和差集(Difference)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="keyword">let</span> b = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 并集</span></span><br><span class="line"><span class="keyword">let</span> union = <span class="keyword">new</span> <span class="built_in">Set</span>([...a, ...b]);</span><br><span class="line"><span class="comment">// Set &#123;1, 2, 3, 4&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 交集</span></span><br><span class="line"><span class="keyword">let</span> intersect = <span class="keyword">new</span> <span class="built_in">Set</span>([...a].filter(<span class="function"><span class="params">x</span> =&gt;</span> b.has(x)));</span><br><span class="line"><span class="comment">// set &#123;2, 3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 差集</span></span><br><span class="line"><span class="keyword">let</span> difference = <span class="keyword">new</span> <span class="built_in">Set</span>([...a].filter(<span class="function"><span class="params">x</span> =&gt;</span> !b.has(x)));</span><br><span class="line"><span class="comment">// Set &#123;1&#125;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><h4 id="含义和基本用法"><a href="#含义和基本用法" class="headerlink" title="含义和基本用法"></a>含义和基本用法</h4><blockquote>
-<p><code>JavaScript</code> 的对象,本质上是键值对的集合 (Hash 结构) ,传统的只能用字符串当作键,有很大的限制性.Map数据解决了这个问题,使得”键”的范围不限于字符串,各种类型的值都可以当作键. 也就是Object结构提供”字符串-值”的对应,map数据提供”值-值”的对应</p>
-</blockquote>
-<ul>
-<li><p><code>Map</code> 构造函数接受数组作为参数.事实上任何据有Iterator接口的,且每个成员都是一个双元素的数组的数据结构都可以当作<code>Map</code>数据的参数</p>
-<ul>
-<li><p>如果对同一个键多次赋值,后面的值将覆盖前面的值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">map</span><br><span class="line">    .set(<span class="number">1</span>,<span class="string">'aaaa'</span>)</span><br><span class="line">	.set(<span class="number">1</span>,<span class="string">'bbb'</span>);</span><br><span class="line"></span><br><span class="line">map.get(<span class="number">1</span>) <span class="comment">//'bbb'</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果读取一个未知的键,则返回的<code>undefined</code> </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Map</span>().get(<span class="string">'asfddfs'</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>注意:</strong> 只有对同一个对象的引用,Map数据才将视为同一个键.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"></span><br><span class="line">map.set([<span class="string">'a'</span>], <span class="number">555</span>);</span><br><span class="line">map.get([<span class="string">'a'</span>]) <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//例二</span></span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> k1 = [<span class="string">'a'</span>];</span><br><span class="line"><span class="keyword">const</span> k2 = [<span class="string">'a'</span>];</span><br><span class="line"></span><br><span class="line">map</span><br><span class="line">.set(k1, <span class="number">111</span>)</span><br><span class="line">.set(k2, <span class="number">222</span>);</span><br><span class="line"></span><br><span class="line">map.get(k1) <span class="comment">// 111</span></span><br><span class="line">map.get(k2) <span class="comment">// 222</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="实例属性和操作方法"><a href="#实例属性和操作方法" class="headerlink" title="实例属性和操作方法"></a>实例属性和操作方法</h4><ul>
-<li>属性<ul>
-<li>size 返回Map数据成员的总数</li>
-<li>Map.prototype.set(key,value)</li>
-<li>Map.prototype.get(key) <code>get</code> 方法读取<code>key</code> 对应的键值.如果找不到<code>key</code> ,返回<code>undefined</code> </li>
-<li>Map.prototype.has(key) 返回一个布尔值</li>
-<li>Map.prototype.delete(key) 返回一个布尔值</li>
-<li>Map.prototype.clearn() 没有返回值</li>
-</ul>
-</li>
-<li>遍历方法<ul>
-<li><code>Map.prototype.keys()</code>：返回键名的遍历器。</li>
-<li><code>Map.prototype.values()</code>：返回键值的遍历器。</li>
-<li><code>Map.prototype.entries()</code>：返回所有成员的遍历器。</li>
-<li><code>Map.prototype.forEach()</code>：遍历 Map 的所有成员。</li>
-</ul>
-</li>
-</ul>
-<h4 id="与其他数据结构的相互转换"><a href="#与其他数据结构的相互转换" class="headerlink" title="与其他数据结构的相互转换"></a>与其他数据结构的相互转换</h4><ul>
-<li><p>Map转换成数组</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>()</span><br><span class="line">	.set(<span class="literal">true</span>,<span class="number">7</span>)</span><br><span class="line">	.set(&#123;<span class="attr">foo</span>:<span class="number">3</span>&#125;,[<span class="string">'abc'</span>]);</span><br><span class="line"></span><br><span class="line">[...myMap]</span><br><span class="line"><span class="comment">//[ [true,7],[ &#123;foo:3&#125;,['abc'] ] ]</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>数组转为Map</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Map</span>([</span><br><span class="line">    [<span class="literal">true</span>,<span class="number">7</span>],</span><br><span class="line">    [&#123;<span class="attr">foo</span>:<span class="number">3</span>&#125;,[<span class="string">'abc'</span>]]</span><br><span class="line">])</span><br><span class="line"><span class="comment">//Map&#123;</span></span><br><span class="line"><span class="comment">// true =&gt;7,</span></span><br><span class="line"><span class="comment">//Object&#123;foo:3&#125; =&gt;['abc']</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Map 转为对象</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strMapToObj</span>(<span class="params">strMap</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> obj = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> [k,v] <span class="keyword">of</span> strMap) &#123;</span><br><span class="line">    obj[k] = v;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>()</span><br><span class="line">  .set(<span class="string">'yes'</span>, <span class="literal">true</span>)</span><br><span class="line">  .set(<span class="string">'no'</span>, <span class="literal">false</span>);</span><br><span class="line">strMapToObj(myMap)</span><br><span class="line"><span class="comment">// &#123; yes: true, no: false &#125;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>如果是非字符串的键名,键名就会被转成字符串,在作为对象的键名</strong></p>
-</li>
-<li><p>对象转为Map</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">objToMap</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> strMap = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i <span class="keyword">in</span> <span class="built_in">Object</span>.keys[obj])&#123;</span><br><span class="line">        strMap.set(i,key[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> strMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Map 转JSON</p>
-<ul>
-<li><p>Map的键名都是字符串,可以直接转为对象JSON.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strMapToJson</span>(<span class="params">strMap</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(strMapToObj(strMap));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>().set(<span class="string">'yes'</span>, <span class="literal">true</span>).set(<span class="string">'no'</span>, <span class="literal">false</span>);</span><br><span class="line">strMapToJson(myMap)</span><br><span class="line"><span class="comment">// '&#123;"yes":true,"no":false&#125;'</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Map 的键名有非字符串，这时可以选择转为数组 JSON。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapToArrayJson</span>(<span class="params">map</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify([...map]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myMap = <span class="keyword">new</span> <span class="built_in">Map</span>().set(<span class="literal">true</span>, <span class="number">7</span>).set(&#123;<span class="attr">foo</span>: <span class="number">3</span>&#125;, [<span class="string">'abc'</span>]);</span><br><span class="line">mapToArrayJson(myMap)</span><br><span class="line"><span class="comment">// '[[true,7],[&#123;"foo":3&#125;,["abc"]]]'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>JSON 转Map</p>
-<ul>
-<li><p>JSON 转为Map,正常情况下,所有的键名为字符串</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonToStrMap</span>(<span class="params">jsonStr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> objToStrMap(<span class="built_in">JSON</span>.parse(jsonStr));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jsonToStrMap(<span class="string">'&#123;"yes": true, "no": false&#125;'</span>)</span><br><span class="line"><span class="comment">// Map &#123;'yes' =&gt; true, 'no' =&gt; false&#125;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>非字符串的需要转回成数组,然后再转换成Map数据</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonToMap</span>(<span class="params">jsonStr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Map</span>(<span class="built_in">JSON</span>.parse(jsonStr));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jsonToMap(<span class="string">'[[true,7],[&#123;"foo":3&#125;,["abc"]]]'</span>)</span><br><span class="line"><span class="comment">// Map &#123;true =&gt; 7, Object &#123;foo: 3&#125; =&gt; ['abc']&#125;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Iterator-和for…of循环"><a href="#Iterator-和for…of循环" class="headerlink" title="Iterator 和for…of循环"></a>Iterator 和for…of循环</h2><blockquote>
-<p>遍历器(Iterator) 提供一个接口,为各种不同数据结构提供统一的访问机制.任何数据结构只要部署 <code>Iterator</code> 接口,就可以完成遍历操作. </p>
-</blockquote>
-<h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3><h4 id="Iterator-遍历器-的概念"><a href="#Iterator-遍历器-的概念" class="headerlink" title="Iterator(遍历器)的概念"></a>Iterator(遍历器)的概念</h4><p><strong>作用:</strong> </p>
-<ul>
-<li>为各种数据提供统一的,简便的访问接口</li>
-<li>使数据结构的成员能够按照某种依次排序</li>
-<li>ES6创建一种新的遍历命令<code>for....of</code> 循环</li>
-</ul>
-<p><strong>Iterator 的遍历过程:</strong></p>
-<p>（1）创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象。</p>
-<p>（2）第一次调用指针对象的<code>next</code>方法，可以将指针指向数据结构的第一个成员。</p>
-<p>（3）第二次调用指针对象的<code>next</code>方法，指针就指向数据结构的第二个成员。</p>
-<p>（4）不断调用指针对象的<code>next</code>方法，直到它指向数据结构的结束位置。</p>
-<p>每一次调用<code>next</code>方法，都会返回数据结构的当前成员的信息。具体来说，就是返回一个包含<code>value</code>和<code>done</code>两个属性的对象。其中，<code>value</code>属性是当前成员的值，<code>done</code>属性是一个布尔值，表示遍历是否结束。</p>
-<h4 id="默认Iterator接口"><a href="#默认Iterator接口" class="headerlink" title="默认Iterator接口"></a>默认Iterator接口</h4><p>ES6 规定,默认的<code>Iterator</code> 接口部署在数据结构的<code>Symbol.iterator</code> 属性,只要数据结构具有<code>Symbol.iterator</code> 属性,就可以认为是’’可遍历的’’.</p>
-<ul>
-<li><p>原生具有<code>Iterator</code> 接口的数据结构如下:</p>
-<ul>
-<li>Array</li>
-<li>Map</li>
-<li>Set</li>
-<li>String</li>
-<li>TypedArray</li>
-<li>函数的 arguments 对象</li>
-<li>NodeList 对象</li>
-</ul>
-</li>
-<li><p>对象如果想要具备可被<code>for...of</code> 循环调用的<code>Iterator</code> 接口,就必须在<code>Symbol.iterator</code> 的属性上部署遍历器的生成方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RangeIterator</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(start, stop) &#123;</span><br><span class="line">    <span class="keyword">this</span>.value = start;</span><br><span class="line">    <span class="keyword">this</span>.stop = stop;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  [<span class="built_in">Symbol</span>.iterator]() &#123; <span class="keyword">return</span> <span class="keyword">this</span>; &#125;</span><br><span class="line"></span><br><span class="line">  next() &#123;</span><br><span class="line">    <span class="keyword">var</span> value = <span class="keyword">this</span>.value;</span><br><span class="line">    <span class="keyword">if</span> (value &lt; <span class="keyword">this</span>.stop) &#123;</span><br><span class="line">      <span class="keyword">this</span>.value++;</span><br><span class="line">      <span class="keyword">return</span> &#123;<span class="attr">done</span>: <span class="literal">false</span>, <span class="attr">value</span>: value&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="attr">done</span>: <span class="literal">true</span>, <span class="attr">value</span>: <span class="literal">undefined</span>&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">range</span>(<span class="params">start, stop</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> RangeIterator(start, stop);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> value <span class="keyword">of</span> range(<span class="number">0</span>, <span class="number">3</span>)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value); <span class="comment">// 0, 1, 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>为一个对象添加<code>Iterator</code> 接口</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    data:[<span class="string">'hello'</span>,<span class="string">"world"</span>],</span><br><span class="line">    [<span class="built_in">Symbol</span>.iterator]()&#123;</span><br><span class="line">        <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">			next()&#123;</span><br><span class="line">                <span class="keyword">if</span>(index&lt;self.data.length) &#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123;</span><br><span class="line">						value:self.data[index++],</span><br><span class="line">                        done:<span class="literal">false</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> &#123;</span><br><span class="line">						value:<span class="literal">undefined</span>,</span><br><span class="line">                        done:<span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="调用-Iterator-接口的场合"><a href="#调用-Iterator-接口的场合" class="headerlink" title="调用 Iterator 接口的场合"></a>调用 Iterator 接口的场合</h4><blockquote>
-<p>在一些场景中会默认调用<code>Iterator</code> 接口</p>
-</blockquote>
-<ul>
-<li>解构赋值</li>
-<li>扩展运算符</li>
-<li>yield*</li>
-<li>其他场合<ul>
-<li>for…of</li>
-<li>Array.from()</li>
-<li>Map(), Set(), WeakMap(), WeakSet()（比如<code>new Map([[&#39;a&#39;,1],[&#39;b&#39;,2]])</code>）</li>
-<li>Promise.all()</li>
-<li>Promise.race()</li>
-</ul>
-</li>
-</ul>
-<h4 id="字符串的Iterator接口"><a href="#字符串的Iterator接口" class="headerlink" title="字符串的Iterator接口"></a>字符串的Iterator接口</h4><blockquote>
-<p>字符串是一个类似数组的对象,也具有Iterator接口</p>
-</blockquote>
-<h4 id="Iterator接口与Generator-函数"><a href="#Iterator接口与Generator-函数" class="headerlink" title="Iterator接口与Generator 函数"></a><code>Iterator</code>接口与<code>Generator</code> 函数</h4><p><code>Symbol.iterator</code> 最简单的实现,还是使用<code>Generator</code>函数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> myIterable  = &#123;</span><br><span class="line">	[<span class="built_in">Symbol</span>.iterator]:<span class="function"><span class="keyword">function</span>* (<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">[...myIterable]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者采用下面的方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    *[<span class="built_in">Symbol</span>.iterator]()&#123;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="string">"hello"</span>;</span><br><span class="line">        <span class="keyword">yield</span>:<span class="string">'world'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x <span class="keyword">of</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(x);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// "hello"</span></span><br><span class="line"><span class="comment">// "world"</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="for-of循环"><a href="#for-of循环" class="headerlink" title="for...of循环"></a><code>for...of</code>循环</h3><blockquote>
-<p>只要数据结构部署<code>Symbol.iterator</code> 属性,就可以用<code>for...of</code> 循环遍历它的成员</p>
-</blockquote>
-<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><ul>
-<li><p>数组原生具备<code>Iterator</code> 接口,<code>for...of</code> 循环本质上就是调用这个接口产生的遍历器</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr =[<span class="string">'red'</span>,<span class="string">'green'</span>,<span class="string">'blue'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> v <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v); <span class="comment">// red green blue</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="built_in">Symbol</span>.iterator] = arr[<span class="built_in">Symbol</span>.iterator].bind(arr);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> v <span class="keyword">of</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v); <span class="comment">// red green blue</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="Set-和-Map-结构"><a href="#Set-和-Map-结构" class="headerlink" title="Set 和 Map 结构"></a>Set 和 Map 结构</h4><h4 id="计算生成的数据结构"><a href="#计算生成的数据结构" class="headerlink" title="计算生成的数据结构"></a>计算生成的数据结构</h4><p>有些数据结构是在现有的数据结构的基础上,计算生成的.比如，ES6 的数组、Set、Map 都部署了以下三个方法，调用后都返回遍历器对象。</p>
-<ul>
-<li><code>entries()</code> 返回一个遍历器对象，用来遍历<code>[键名, 键值]</code>组成的数组。对于数组，键名就是索引值；对于 Set，键名与键值相同。Map 结构的 Iterator 接口，默认就是调用<code>entries</code>方法。</li>
-<li><code>keys()</code> 返回一个遍历器对象，用来遍历所有的键名。</li>
-<li><code>values()</code> 返回一个遍历器对象，用来遍历所有的键值。</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> pair <span class="keyword">of</span> arr.entries()) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(pair);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// [0, 'a']</span></span><br><span class="line"><span class="comment">// [1, 'b']</span></span><br><span class="line"><span class="comment">// [2, 'c']</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="类似于数组的对象"><a href="#类似于数组的对象" class="headerlink" title="类似于数组的对象"></a>类似于数组的对象</h4><ul>
-<li><p><code>for...of</code> 循环能正确识别32为的UTF_16字符</p>
-</li>
-<li><p>并不是所有的类似于数组的对象都具有<code>Iterator</code> 接口,解决办法就是使用<code>Array.from</code> 方法转为数组</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arrayLike = &#123; <span class="attr">length</span>: <span class="number">2</span>, <span class="number">0</span>: <span class="string">'a'</span>, <span class="number">1</span>: <span class="string">'b'</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x <span class="keyword">of</span> arrayLike) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x <span class="keyword">of</span> <span class="built_in">Array</span>.from(arrayLike)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h4><p>对于普通对象,<code>for...of</code> 结构不能直接使用,必须要部署了<code>Iterator</code> 接口后才能使用.但是,在这种情况下,<strong><code>for...in</code>循环依然可以用来遍历键名</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> es6 = &#123;</span><br><span class="line">  edition: <span class="number">6</span>,</span><br><span class="line">  committee: <span class="string">"TC39"</span>,</span><br><span class="line">  standard: <span class="string">"ECMA-262"</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> e <span class="keyword">in</span> es6) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// edition</span></span><br><span class="line"><span class="comment">// committee</span></span><br><span class="line"><span class="comment">// standard</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> e <span class="keyword">of</span> es6) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// TypeError: es6[Symbol.iterator] is not a function</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>解决办法:</strong></p>
-<ul>
-<li><p>使用<code>Object.keys</code> 方法将对象的键名生成一个数组,然后遍历这个数组</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">of</span> <span class="built_in">Object</span>.keys(someObject)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key + <span class="string">': '</span> + someObject[key]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>另一个方法是使用<code>Generator</code>函数包装对象</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">entries</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">of</span> <span class="built_in">Object</span>.keys(obj))&#123;</span><br><span class="line">		<span class="keyword">yield</span> [key,obj[key]];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> [key,value] <span class="keyword">of</span> entries(obj))&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(kry,<span class="string">'-&gt;'</span>,value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//a -&gt;1</span></span><br><span class="line"><span class="comment">//b -&gt;2</span></span><br><span class="line"><span class="comment">//c -&gt;3</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="与其他遍历语法的对比"><a href="#与其他遍历语法的对比" class="headerlink" title="与其他遍历语法的对比"></a>与其他遍历语法的对比</h4><ul>
-<li><p>for 循环     </p>
-<ul>
-<li>写法比较麻烦</li>
-</ul>
-</li>
-<li><p>数组内置的<code>forEach</code>   </p>
-<ul>
-<li>无法中途跳出<code>forEach</code>循环,break和return命令都不行</li>
-</ul>
-</li>
-<li><p><code>for...in</code>  可以遍历数组的键名</p>
-<ul>
-<li>数组的键名是数字.但是<code>for...in</code> 循环是以字符串作为键名’’0’’,”1”,”2”</li>
-<li><code>for...in</code> 循环不仅遍历数字键名还会遍历添加其他键,包括原型链上的键</li>
-<li>在某些情况下,<code>for...in</code> 循环会以任意顺序遍历键名</li>
-<li><code>for...in</code> 循环主要是为遍历对象而设计的,不适用于遍历数组</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><code>for...of</code>循环的优点</p>
-<ul>
-<li>语法简洁</li>
-<li>可以与break.continue和return配合使用</li>
-<li>提供遍历所有数据接口的统一操作接口</li>
-</ul>
-</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/31/ECMAScript6 个人理解/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1975,56 +1235,16 @@
 
       
         
-          
-            <h3 id="修改默认滚动条样式"><a href="#修改默认滚动条样式" class="headerlink" title="修改默认滚动条样式"></a>修改默认滚动条样式</h3><p>(overflow:auto)</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">::-webkit-scrollbar</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">5px</span>;</span><br><span class="line">    <span class="attribute">height</span>:<span class="number">5px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-track-piece</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#CCCCCC</span>;</span><br><span class="line">    <span class="attribute">-webkit-border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span><span class="selector-pseudo">:vertical</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">5px</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#999999</span>;</span><br><span class="line">    <span class="attribute">-webkit-border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span><span class="selector-pseudo">:horizontal</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">5px</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: <span class="number">#CCCCCC</span>;</span><br><span class="line">    <span class="attribute">-webkit-border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="css3"><a href="#css3" class="headerlink" title="css3"></a>css3</h3><h4 id="弹性盒子（css3）"><a href="#弹性盒子（css3）" class="headerlink" title="弹性盒子（css3）"></a>弹性盒子（css3）</h4><p>父盒子</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parent</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>:flex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>子盒子</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.child</span>&#123;</span><br><span class="line">    <span class="attribute">flex</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">1%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flex: flex-grow flex-shrink flex-basis|auto|initial|inherit</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>flex-grow:一个数字，项目的放大量</li>
-<li><em>flex-shrink</em> ：数字，项目的缩小量</li>
-<li>默认值为（0 1 auto）</li>
-</ul>
-<h4 id="文字超出隐藏-父级盒子有宽度"><a href="#文字超出隐藏-父级盒子有宽度" class="headerlink" title="文字超出隐藏(父级盒子有宽度)"></a>文字超出隐藏(父级盒子有宽度)</h4><ul>
-<li>单行</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.child</span>&#123;</span><br><span class="line">   <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">   <span class="attribute">overflow</span>: hidden;</span><br><span class="line">   <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>多行</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.child</span>&#123;</span><br><span class="line">  <span class="attribute">display</span>: -webkit-box;</span><br><span class="line"> <span class="attribute">-webkit-box-orient</span>: vertical;</span><br><span class="line"> <span class="attribute">-webkit-line-clamp</span>: <span class="number">2</span>;</span><br><span class="line"> <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改默认elelment样式"><a href="#修改默认elelment样式" class="headerlink" title="修改默认elelment样式"></a>修改默认elelment样式</h3><ul>
-<li><p>css中使用</p>
- <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="selector-tag">style</span> <span class="selector-tag">scoped</span>&gt;</span><br><span class="line">  <span class="selector-class">.parent</span> &gt;&gt;&gt; <span class="selector-class">.child</span> &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>less和sass</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.van-tabs /deep/ .van-ellipsis &#123; color: blue&#125;;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="双飞翼布局"><a href="#双飞翼布局" class="headerlink" title="双飞翼布局"></a>双飞翼布局</h3><blockquote>
-<p>两边宽度固定,中间自适应</p>
+          <blockquote>
+<p>工作中常用的css样式集合</p>
 </blockquote>
-<ul>
-<li><p>html</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ctn"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"left"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"right"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>css</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ctn</span> &#123;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">900px</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">	<span class="attribute">border</span>: <span class="number">1px</span> solid darkred;</span><br><span class="line">	<span class="attribute">overflow</span>: hidden;</span><br><span class="line">	<span class="attribute">padding</span>: <span class="number">0</span> <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="selector-class">.middle</span> &#123;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">	<span class="attribute">float</span>: left;</span><br><span class="line">	<span class="attribute">position</span>: relative;</span><br><span class="line">	<span class="attribute">background</span>: blueviolet;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="selector-class">.left</span> &#123;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">80px</span>;</span><br><span class="line">	<span class="attribute">background</span>: yellowgreen;</span><br><span class="line">	<span class="attribute">float</span>: left;</span><br><span class="line">	<span class="attribute">position</span>: relative;</span><br><span class="line">	<span class="attribute">margin-left</span>: -<span class="number">100%</span>;</span><br><span class="line">	<span class="attribute">left</span>: -<span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="selector-class">.right</span> &#123;</span><br><span class="line">	<span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">	<span class="attribute">height</span>: <span class="number">80px</span>;</span><br><span class="line">	<span class="attribute">background</span>: deeppink;</span><br><span class="line">	<span class="attribute">float</span>: left;</span><br><span class="line">	<span class="attribute">position</span>: relative;</span><br><span class="line">	<span class="attribute">margin-left</span>: -<span class="number">100px</span>;</span><br><span class="line">	<span class="attribute">right</span>: -<span class="number">100px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/30/css样式/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2163,257 +1383,16 @@
 
       
         
-          
-            <h2 id="TypeScript（支持Es6）"><a href="#TypeScript（支持Es6）" class="headerlink" title="TypeScript（支持Es6）"></a>TypeScript（支持Es6）</h2><h3 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h3><ul>
-<li><p>布尔值</p>
-<ul>
-<li>true或者false</li>
-</ul>
-</li>
-<li><p>数字</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> decLiteral:<span class="built_in">number</span> = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> hexLiteral:<span class="built_in">number</span> = <span class="number">0xf</span>od;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>字符串</p>
-<ul>
-<li>支持模板字符串（`）以${ expr }形式嵌入表达式</li>
-</ul>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> name:<span class="built_in">string</span> = <span class="string">`a`</span>;</span><br><span class="line"><span class="keyword">let</span> age:<span class="built_in">number</span> = <span class="number">37</span>;</span><br><span class="line"><span class="keyword">let</span> message:<span class="built_in">string</span> = <span class="string">`Hello,my name is <span class="subst">$&#123; name &#125;</span>,I'll be <span class="subst">$&#123; age+<span class="number">1</span> &#125;</span> years old next year`</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>数组</p>
-<ul>
-<li><p>可以在元素类型后面接上[ ],表示此类型元素为一个数组</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> list:<span class="built_in">number</span>[] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用数组泛型，Array&lt;元素类型&gt;</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> list:<span class="built_in">Array</span>&lt;<span class="built_in">number</span>&gt; = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>元组Tuple</p>
-<p><strong>元组类型允许表示一个已知元素数量和类型的数组，各元素类型不必相同</strong></p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> x:[<span class="built_in">string</span>,<span class="built_in">number</span>];</span><br><span class="line">x = [<span class="string">'hello'</span>,<span class="number">10</span>] <span class="comment">//ok</span></span><br><span class="line">x = [<span class="number">10</span>,<span class="string">'hello'</span>] <span class="comment">//error</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>当访问一个一直索引的元素，会得到正确的类型</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(x[o].substr(<span class="number">1</span>)); <span class="comment">//ok</span></span><br><span class="line"><span class="built_in">console</span>.log(x[<span class="number">1</span>].substr(<span class="number">1</span>)); <span class="comment">//error,'number' does not hava 'substr'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>枚举</p>
-<ul>
-<li><p>enum类型是对JavaScript标准类型的补充。使用枚举类型可以为一组数值赋予有好的乐行</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;red,green,Blue&#125;;</span><br><span class="line"><span class="keyword">let</span> c:Color = Color.green;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>默认情况下，从0开始为元素的编号，也可以手动设置</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;red = <span class="number">1</span>，green ,blue&#125;</span><br><span class="line"><span class="keyword">let</span> c:Color = color.green;</span><br></pre></td></tr></table></figure>
-
-<p>或者是</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;Red = <span class="number">1</span>, Green = <span class="number">2</span>, Blue = <span class="number">4</span>&#125;</span><br><span class="line"><span class="keyword">let</span> c: Color = Color.Green;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>枚举类型可以通过枚举的值得到他的名字</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;red = <span class="number">1</span>, green, Blue&#125;;</span><br><span class="line"><span class="keyword">let</span> colorName:<span class="built_in">string</span> = Color[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">alert(colorName); <span class="comment">//green</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>Any</p>
-<ul>
-<li><p>给那些在编程阶段还不清楚的类型变量制定一个类型</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> notSure: <span class="built_in">any</span> = <span class="number">4</span>;</span><br><span class="line">notSure = <span class="string">"maybe a string instead"</span>;</span><br><span class="line">notSure = <span class="literal">false</span>; <span class="comment">// okay, definitely a boolean</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>只知道一部分数据的类型时：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> list: <span class="built_in">any</span>[] = [<span class="number">1</span>, <span class="literal">true</span>, <span class="string">"free"</span>];</span><br><span class="line">list[<span class="number">1</span>] = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>Void</p>
-<ul>
-<li><p>某种程度上，void类型像是any类型相反，他表示没有任何类型。当一个函数没有返回值时，她通常会见到其返回值类型值为void：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">warnUser</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">    alert(<span class="string">'This is my warning message'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>声明一个void类型的量没什么大的用途，只能赋予它undefind和null：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> unusuable :<span class="built_in">void</span> = <span class="literal">undefined</span>;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>Null和Undefind</p>
-</li>
-<li><p>Never</p>
-<ul>
-<li><p><code>never</code>类型表示的是永不存在的值的类型。</p>
-<ul>
-<li><p><code>naver</code> 类型是那些总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型</p>
-</li>
-<li><p>变量也可能是<code>naver</code>类型，当他们被永不为真的类型保护所约束时</p>
-</li>
-<li><p><code>naver</code> 是任何类型的子类型，也可以赋值给任何类型，没有类型时<code>naver</code>的子类型或可以赋值给<code>never</code>类型</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//返回never的函数必须存在无法到达终点</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">error</span>(<span class="params">message:<span class="built_in">string</span></span>) :<span class="title">never</span></span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//推断返回值类型为never</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="title">fail</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> error(<span class="string">'Something failed'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//返回never的函数必须存在无法到达的终点</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">infiniteLoop</span>(<span class="params"></span>):<span class="title">never</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>类型断言</p>
-<ul>
-<li><p>“尖括号”语法：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someValue: <span class="built_in">any</span> = <span class="string">"this is a string"</span>;</span><br><span class="line"><span class="keyword">let</span> strLength: <span class="built_in">number</span> = (&lt;<span class="built_in">string</span>&gt; someValue).length;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>另一个为as语法</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someValue: <span class="built_in">any</span> = <span class="string">"this is a string"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> strLength: <span class="built_in">number</span> = (someValue <span class="keyword">as</span> <span class="built_in">string</span>).length</span><br></pre></td></tr></table></figure>
-
-<p><strong>在TypeScript里使用JSX时，只要as语法断言被允许的</strong></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="变量声明"><a href="#变量声明" class="headerlink" title="变量声明"></a>变量声明</h3><ul>
-<li><p><code>var</code> 声明</p>
-<ul>
-<li>作用域规则</li>
-<li>捕获变量怪异之处</li>
-</ul>
-</li>
-<li><p>let声明</p>
-<ul>
-<li>块作用域</li>
-<li>重定义及屏蔽</li>
-<li>块级作用域变量的获取</li>
-</ul>
-</li>
-<li><p>const声明</p>
-<ul>
-<li><code>let</code> vs.<code>const</code></li>
-</ul>
-</li>
-<li><p>解构</p>
-<ul>
-<li><p>解构数组</p>
-<ul>
-<li><p>作用于函数参数</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">[first, second] : [<span class="built_in">number</span>,<span class="built_in">number</span>]</span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(first);</span><br><span class="line">    <span class="built_in">console</span>.log(second);</span><br><span class="line">&#125;</span><br><span class="line">f(input);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以在数组里面使用…语法创建剩余变量：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> [first,...rest] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="built_in">console</span>.log(first); <span class="comment">//1</span></span><br><span class="line"><span class="built_in">console</span>.log(rest)；<span class="comment">//[2,3,4]</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>对象解构</p>
-<ul>
-<li><p>在对象里使用…语法创建剩余变量：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; a, ...passthrough &#125; = o;</span><br><span class="line"><span class="keyword">let</span> total = passthrough.b + passthrought.c.length;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>属性重命名</p>
-<ul>
-<li><p>可以给属性以不同的名字：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; a:newName1, b:newName2 &#125; = o;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>相当于：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> newName1 = o.a;</span><br><span class="line"><span class="keyword">let</span> newName2 = o.b;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>令人困惑的是，这里的冒号不是指示类型。如果想指定类型。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123;a,b&#125; :&#123;a:<span class="built_in">String</span>,b:<span class="built_in">number</span>&#125; = o;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>默认值</p>
-<ul>
-<li><p>默认值可以让你在属性为undefind时使用缺省值</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">keepWholeObject</span>(<span class="params">keepWholeObject:&#123;a;<span class="built_in">string</span>,b?:<span class="built_in">number</span>&#125;</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> &#123; a,b =<span class="number">1001</span> &#125; = wholeObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>现在，即使b为undefind ，keepWholeObject 函数的变量 wholeObject的属性a和b都会有值。</p>
-</li>
-</ul>
-</li>
-<li><p>函数声明</p>
-<ul>
-<li><p>解构也能用于函数声明。</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> C = &#123; a:<span class="built_in">string</span>,b?:<span class="built_in">number</span> &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">&#123; a,b &#125; :c</span>):<span class="title">void</span> </span>&#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>但是，通常情况下更多的是指定默认值，解构默认值有些棘手。首先，你需要在默认值之前设置其格式</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">&#123; a,b &#125; = &#123; a:'',b:0 &#125;</span>):<span class="title">void</span> </span>&#123;</span><br><span class="line">    <span class="comment">//.....</span></span><br><span class="line">&#125;</span><br><span class="line">f()； <span class="comment">//ok,default to &#123; a:"",b:0 &#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>  <strong>上面的代码是一个类型推断的例子</strong></p>
-</li>
-<li><p>其次，需要知道在解构属性上给予一个默认或可选的属性来代替主初始化列表。要知道c的定义有一个b的可选属性</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">&#123; a,b = 0 &#125; = &#123; a:'' &#125;</span>):<span class="title">void</span> </span>&#123;</span><br><span class="line">    <span class="comment">//.....</span></span><br><span class="line">&#125;</span><br><span class="line">f(&#123;a:<span class="string">'yes'</span>&#125;); <span class="comment">//ok,default b = 0;</span></span><br><span class="line">f(); <span class="comment">//ok,default to &#123; a:"" &#125;,which then default b = 0</span></span><br><span class="line">f( &#123;&#125; ); <span class="comment">//error,"a" is required if you supply an argument</span></span><br></pre></td></tr></table></figure>
-
-<p>  要小心使用解构。从前面的例子可以看出，就算是最简单的结构表达式也是难以理解。尤其但存在深层嵌套解构的时候，就算这时没有堆叠在一起重名，默认值和类型注解，也是令人难以理解的。解构表达式要尽量保持小而简单。你自己也可以直接使用解构将会生成的赋值表达式。</p>
-</li>
-</ul>
-</li>
-<li><p>展开</p>
-<ul>
-<li><p><strong>展开操作符与解构相反。它允许你将一个数组展开为另一个数组，或将一个对象展开为另一个对象</strong></p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> first = [<span class="number">1</span>,<span class="number">2</span>];</span><br><span class="line"><span class="keyword">let</span> second = [<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">let</span> bothPlus = [<span class="number">0</span>,...first, ...second,<span class="number">5</span>];</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>这会令bothPlus的值为[0,1,2,3,4,5] .展开操作创建了first和second的一份浅拷贝。他们不会被展开操作所改变</p>
-</li>
-<li><p>展开对象</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> defaults = &#123; food:<span class="string">"spicy"</span>,price:<span class="string">"$$"</span>,ambiance:<span class="string">"noisy"</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> search = &#123; ..defaults,food:<span class="string">"rich"</span> &#125;</span><br></pre></td></tr></table></figure>
-
-<p>  seach的值为<code>{ food:&quot;rich&quot;, price:&quot;$$&quot;,ambiiance:&#39;&quot;noisy&quot;&#39; }</code> .对象的展开比数组的展开复杂的多。像数组展开一样，他是从左至右处理，但结果仍为对象。这就意味着出现在展开对象后面的属性会覆盖前面的属性。因此，如果我们修改上面的例子，在结尾进行展开的话：</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> defaults = &#123; food:<span class="string">"spicy"</span>,price:<span class="string">"$$"</span>,ambiance:<span class="string">"noisy"</span> &#125;</span><br><span class="line"><span class="keyword">let</span> search = &#123; food:<span class="string">"rich"</span>,....defaults &#125;</span><br></pre></td></tr></table></figure>
-
-<p>  那么，defaults里的food属性会重写food:”rich”,在这里这并不是我们想要的结果</p>
-</li>
-<li><p>对象展开仅包含了对象自身可枚举的属性。也就是说会丢失其方法：</p>
-  <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> C &#123;</span><br><span class="line">    p = <span class="number">12</span>;</span><br><span class="line">    m () &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> c = <span class="keyword">new</span> C();</span><br><span class="line"><span class="keyword">let</span> clone = &#123; ...c &#125;;</span><br><span class="line">clone.p; <span class="comment">//ok</span></span><br><span class="line">clone.m();<span class="comment">//erro</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>其次，TypeScript编译器不允许展开泛型函数上的类型参数。这个特性会在TypeScript的未来版本中考虑实现</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><ul>
-<li><p>介绍</p>
-<p>TypeScript的核心原则之一是对值所具有的结构进行类型的检查。它有时被称为“鸭式辩型法”或“结构性子类型化”。在TypeScript里，接口的作用就是为这些命名和你的代码或者第三方代码定义契约。</p>
-</li>
-<li><p>接口初探</p>
-<ul>
-<li><p>接口如何工作的</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printLabel</span>(<span class="params">labelledObj :&#123; label:srting &#125;</span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(labelledObj.label);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myObj = &#123; size:<span class="number">10</span>,label:<span class="string">"Size 10 Onject"</span> &#125;;</span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure>
-
-<p><strong><code>printLabel</code>有一个参数，并要求这个对象参数有一个名为<code>label</code>类型为<code>string</code>的属性。 需要注意的是，我们传入的对象参数实际上会包含很多属性，但是编译器只会检查那些必需的属性是否存在，并且其类型是否匹配</strong></p>
-</li>
-<li><p>使用接口重写上面的例子</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> LabelledValue &#123;</span><br><span class="line">  label: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printLabel</span>(<span class="params">labelledObj: LabelledValue</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(labelledObj.label);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myObj = &#123;size: <span class="number">10</span>, label: <span class="string">"Size 10 Object"</span>&#125;;</span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure>
-
-<p><code>LabelledValue</code>接口就好比一个名字，用来描述上面例子里的要求。 它代表了有一个 <code>label</code>属性且类型为<code>string</code>的对象。 需要注意的是，我们在这里并不能像在其它语言里一样，说传给 <code>printLabel</code>的对象实现了这个接口。我们只会去关注值的外形。 只要传入的对象满足上面提到的必要条件，那么它就是被允许的。</p>
-<p>还有一点值得提的是，类型检查器不会去检查属性的顺序，只要相应的属性存在并且类型也是对的就可以。</p>
-</li>
-</ul>
-</li>
-<li><p>可选属性</p>
-<ul>
-<li></li>
-</ul>
-</li>
-<li><p>只读属性</p>
-</li>
-<li><p>额外的属性检查</p>
-</li>
-<li><p>函数类型</p>
-</li>
-<li><p>可索引的类型</p>
-</li>
-<li><p>类类型</p>
-<ul>
-<li>实现接口</li>
-<li>类静态部分与实例部分的区别</li>
-</ul>
-</li>
-<li><p>继承接口</p>
-</li>
-<li><p>混合类型</p>
-</li>
-<li><p>接口继承类</p>
-</li>
-</ul>
-<h3 id="类型兼容"><a href="#类型兼容" class="headerlink" title="类型兼容"></a>类型兼容</h3>
-          
+          <h2 id="TypeScript（支持Es6）"><a href="#TypeScript（支持Es6）" class="headerlink" title="TypeScript（支持Es6）"></a>TypeScript（支持Es6）</h2><blockquote>
+<p>TypeScript 的基础信息</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/30/TypeScript基础/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2552,140 +1531,16 @@
 
       
         
-          
-            <h1 id="webpack-配置"><a href="#webpack-配置" class="headerlink" title="webpack 配置"></a>webpack 配置</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h2 id="管理资源"><a href="#管理资源" class="headerlink" title="管理资源"></a>管理资源</h2><h2 id="管理输出"><a href="#管理输出" class="headerlink" title="管理输出"></a>管理输出</h2><h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><h3 id="使用source-map"><a href="#使用source-map" class="headerlink" title="使用source map"></a>使用source map</h3><blockquote>
-<p>为了更容易追踪错误和警告,<code>JavaScript</code> 提供了<code>source map</code> 功能,将变异后的代码映射回原始源代码</p>
+          <h1 id="webpack-配置"><a href="#webpack-配置" class="headerlink" title="webpack 配置"></a>webpack 配置</h1><blockquote>
+<p>webpack的基础配置</p>
 </blockquote>
-<ul>
-<li><p>webpack.config.js</p>
-<blockquote>
-<p>devtool:”inline-source-map”</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line">  <span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line">  <span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">      app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">      print: <span class="string">'./src/print.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">+   devtool: <span class="string">'inline-source-map'</span>,</span><br><span class="line">    plugins: [</span><br><span class="line">      <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),</span><br><span class="line">      <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        title: <span class="string">'Development'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    ],</span><br><span class="line">    output: &#123;</span><br><span class="line">      filename: <span class="string">'[name].bundle.js'</span>,</span><br><span class="line">      path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="选用一个开发工具"><a href="#选用一个开发工具" class="headerlink" title="选用一个开发工具"></a>选用一个开发工具</h3><ul>
-<li><p>使用观察者模式</p>
-<blockquote>
-<p>不必手动运行整个架构</p>
-</blockquote>
-<p><strong>package.json:</strong></p>
-<blockquote>
-<p>‘’watch’’:”webpack –watch”</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"development"</span>,</span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">    <span class="attr">"description"</span>: <span class="string">""</span>,</span><br><span class="line">    <span class="attr">"main"</span>: <span class="string">"webpack.config.js"</span>,</span><br><span class="line">    <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">      <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span>,</span><br><span class="line">+     "watch": "webpack --watch",</span><br><span class="line">      "build": "webpack"</span><br><span class="line">    &#125;,</span><br><span class="line">    "keywords": [],</span><br><span class="line">    "author": "",</span><br><span class="line">    "license": "ISC",</span><br><span class="line">    "devDependencies": &#123;</span><br><span class="line">      "clean-webpack-plugin": "^0.1.16",</span><br><span class="line">      "css-loader": "^0.28.4",</span><br><span class="line">      "csv-loader": "^2.1.1",</span><br><span class="line">      "file-loader": "^0.11.2",</span><br><span class="line">      "html-webpack-plugin": "^2.29.0",</span><br><span class="line">      "style-loader": "^0.18.2",</span><br><span class="line">      "webpack": "^3.0.0",</span><br><span class="line">      "xml-loader": "^1.2.1"</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用<code>webpack-dev-server</code></p>
-<blockquote>
-<p><code>webpack-dev-server</code> 提供一个简单的web服务器,实现实时重新加载</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i --save-dev webpack-dev-server</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>webpack.config.js</strong></p>
-<blockquote>
-<p>devServer:{</p>
-<p>​    contentBase:’./dist’</p>
-<p>}</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">const path = require('path');</span><br><span class="line">  const HtmlWebpackPlugin = require('html-webpack-plugin');</span><br><span class="line">  const CleanWebpackPlugin = require('clean-webpack-plugin');</span><br><span class="line"></span><br><span class="line">  module.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">      app: './src/index.js',</span><br><span class="line">      print: './src/print.js'</span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: 'inline-source-map',</span><br><span class="line">+   devServer: &#123;</span><br><span class="line">+     contentBase: './dist'</span><br><span class="line">+   &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">      new CleanWebpackPlugin(['dist']),</span><br><span class="line">      new HtmlWebpackPlugin(&#123;</span><br><span class="line">        title: 'Development'</span><br><span class="line">      &#125;)</span><br><span class="line">    ],</span><br><span class="line">    output: &#123;</span><br><span class="line">      filename: '[name].bundle.js',</span><br><span class="line">      path: path.resolve(__dirname, 'dist')</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-
-<p>以上配置告知<code>webpack-dev-server</code> ,在<code>localhost:8080</code> 下建立服务器,将<code>dist</code> 目录下的文件作为可访问文件</p>
-</li>
-<li><p>package.json</p>
-<blockquote>
-<p>‘’start’’:”webpack-dev-server –open”</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">"scripts": &#123;</span><br><span class="line">      "test": "echo \"Error: no test specified\" &amp;&amp; exit 1",</span><br><span class="line">      "watch": "webpack --watch",</span><br><span class="line">+     "start": "webpack-dev-server --open",</span><br><span class="line">      "build": "webpack"</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>使用<code>webpack-dev-middleware</code> </p>
-<blockquote>
-<p>可以把webpack 处理后的文件传递给一个服务器(server).webpack-dev-server在内部使用它,同时可以作为一个单独的包使用,以便进行更多自定义设置来实现更多的需求</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i --save-dev webpack-dev-middleware express</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>webpack.config.js</p>
-<blockquote>
-<p>publicPath会在服务器脚本中用到publicPath:’./‘</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line">  <span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line">  <span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">      app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">      print: <span class="string">'./src/print.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'inline-source-map'</span>,</span><br><span class="line">    plugins: [</span><br><span class="line">      <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),</span><br><span class="line">      <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        title: <span class="string">'Output Management'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    ],</span><br><span class="line">    output: &#123;</span><br><span class="line">      filename: <span class="string">'[name].bundle.js'</span>,</span><br><span class="line">      path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">+     publicPath: <span class="string">'/'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建server.js文件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = express;</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">const</span> webpackDevMiddleware = <span class="built_in">require</span>(<span class="string">'webpack-dev-middleware'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'./webpack.config.js'</span>);</span><br><span class="line"><span class="keyword">const</span> compiler = webpack(config);</span><br><span class="line"></span><br><span class="line">app.use(webpackDevMiddleware(compiler,&#123;</span><br><span class="line">    publicPath:config.output.publicPath</span><br><span class="line">&#125;));</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>,() =&gt;&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'Example app listening on port 3000!\n'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>package.json</p>
-<blockquote>
-<p>“server”:”node server.js”</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> "scripts": &#123;</span><br><span class="line">      "test": "echo \"Error: no test specified\" &amp;&amp; exit 1",</span><br><span class="line">      "watch": "webpack --watch",</span><br><span class="line">      "start": "webpack-dev-server --open",</span><br><span class="line">+     "server": "node server.js",</span><br><span class="line">      "build": "webpack"</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="模块热替换"><a href="#模块热替换" class="headerlink" title="模块热替换"></a>模块热替换</h2><blockquote>
-<p>允许在运行时更新各种模块,而无需进行完全刷新</p>
-</blockquote>
-<h3 id="启用HMR"><a href="#启用HMR" class="headerlink" title="启用HMR"></a>启用HMR</h3><ul>
-<li><p>webpack.config.js</p>
-<blockquote>
-<p>添加NamedModulesPlugin 容易查看要修补(path)的依赖</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line">  <span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line">  <span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line">+ <span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">-      app: <span class="string">'./src/index.js'</span>,</span><br><span class="line">-      print: <span class="string">'./src/print.js'</span></span><br><span class="line">+      app: <span class="string">'./src/index.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    devtool: <span class="string">'inline-source-map'</span>,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">      contentBase: <span class="string">'./dist'</span>,</span><br><span class="line">+     hot: <span class="literal">true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">      <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),</span><br><span class="line">      <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">        title: <span class="string">'Hot Module Replacement'</span></span><br><span class="line">      &#125;),</span><br><span class="line">+     <span class="keyword">new</span> webpack.NamedModulesPlugin(),</span><br><span class="line">+     <span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</span><br><span class="line">    ],</span><br><span class="line">    output: &#123;</span><br><span class="line">      filename: <span class="string">'[name].bundle.js'</span>,</span><br><span class="line">      path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>index.js</p>
-<blockquote>
-<p>告诉webpack接收更新的模块</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br><span class="line">  <span class="keyword">import</span> printMe <span class="keyword">from</span> <span class="string">'./print.js'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">component</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> element = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    <span class="keyword">var</span> btn = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</span><br><span class="line"></span><br><span class="line">    element.innerHTML = _.join([<span class="string">'Hello'</span>, <span class="string">'webpack'</span>], <span class="string">' '</span>);</span><br><span class="line"></span><br><span class="line">    btn.innerHTML = <span class="string">'Click me and check the console!'</span>;</span><br><span class="line">    btn.onclick = printMe;</span><br><span class="line"></span><br><span class="line">    element.appendChild(btn);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> element;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(component());</span><br><span class="line">+</span><br><span class="line">+ <span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">+   <span class="built_in">module</span>.hot.accept(<span class="string">'./print.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">+     <span class="built_in">console</span>.log(<span class="string">'Accepting the updated printMe module!'</span>);</span><br><span class="line">+     printMe();</span><br><span class="line">+   &#125;)</span><br><span class="line">+ &#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="通过Node-js-API"><a href="#通过Node-js-API" class="headerlink" title="通过Node.js API"></a>通过Node.js API</h3><p><strong>注意:</strong> <em>当使用<code>webpack dev server</code> 和<code>Node.js API</code> 时,不要将dev server 选项放在webpack(webpack config object)配置对象中.而是在创建选项的时候,将其作为第二个参数传递,例如</em></p>
-<p><code>new WebpackDevServer(compiler,options)</code></p>
-<ul>
-<li><p>dev-server.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> webpackDevServer = <span class="built_in">require</span>(<span class="string">'webpack-dev-server'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'./webpack.config.js'</span>);</span><br><span class="line"><span class="keyword">const</span> options = &#123;</span><br><span class="line">  contentBase: <span class="string">'./dist'</span>,</span><br><span class="line">  hot: <span class="literal">true</span>,</span><br><span class="line">  host: <span class="string">'localhost'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">webpackDevServer.addDevServerEntrypoints(config, options);</span><br><span class="line"><span class="keyword">const</span> compiler = webpack(config);</span><br><span class="line"><span class="keyword">const</span> server = <span class="keyword">new</span> webpackDevServer(compiler, options);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">5000</span>, <span class="string">'localhost'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'dev server listening on port 5000'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-</li>
-</ul>
-<h2 id="tree-shaking"><a href="#tree-shaking" class="headerlink" title="tree shaking"></a>tree shaking</h2><h2 id="生产环境构建"><a href="#生产环境构建" class="headerlink" title="生产环境构建"></a>生产环境构建</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
-<li><p>安装插件<code>webpack-merge</code></p>
-<blockquote>
-<p>合并webpack配置</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm i --save-dev webpack-merge</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>project</p>
-<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  webpack-demo</span><br><span class="line">  |- package.json</span><br><span class="line"><span class="deletion">- |- webpack.config.js</span></span><br><span class="line"><span class="addition">+ |- webpack.common.js</span></span><br><span class="line"><span class="addition">+ |- webpack.dev.js</span></span><br><span class="line"><span class="addition">+ |- webpack.prod.js</span></span><br><span class="line">  |- /dist</span><br><span class="line">  |- /src</span><br><span class="line">    |- index.js</span><br><span class="line">    |- math.js</span><br><span class="line">  |- /node_modules</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>webpack.common.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">    CleanWebpackPlugin</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">        app: <span class="string">'./src/index.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        filename: <span class="string">'[name].bundle.js'</span>,</span><br><span class="line">        path: path.resolve(__dirname, <span class="string">'dist'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            title: <span class="string">"Production"</span></span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>webpack.dev.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(config, &#123;</span><br><span class="line">    <span class="built_in">module</span>: <span class="string">'development'</span>,</span><br><span class="line">    devtool: <span class="string">"inline-source-map"</span>,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        contentBase: <span class="string">'./dist'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>webpack.pro.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>);</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(config, &#123;</span><br><span class="line">    <span class="built_in">module</span>: <span class="string">'Production'</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/08/webpack初步配置/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2882,6 +1737,8 @@
   
 
 
+  
+
 
 
 
@@ -2920,6 +1777,11 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
