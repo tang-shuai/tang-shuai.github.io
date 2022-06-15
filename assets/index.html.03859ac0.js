@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-817827ca","path":"/workExperience/","title":"","lang":"zh-CN","frontmatter":{},"excerpt":"","headers":[{"level":2,"title":"\u5DE5\u4F5C\u7ECF\u9A8C","slug":"\u5DE5\u4F5C\u7ECF\u9A8C","children":[]}],"git":{"updatedTime":null,"contributors":[]},"filePathRelative":"workExperience/index.md"}');export{e as data};
